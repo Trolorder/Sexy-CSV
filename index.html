@@ -7,52 +7,68 @@
     body {
       background-color: #000000;
       color: #ffffff;
-      text-align: center;
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       height: 100vh;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden; /* empêche le scroll inutile */
     }
+
+    .container {
+      position: relative;     /* important pour positionner le bouton dessus */
+      max-width: 90%;
+      text-align: center;
+    }
+
     img {
-      max-width: 80%;
+      width: 100%;
       height: auto;
-      margin: 30px auto;
-      filter: brightness(1.2);
+      display: block;
+      border-radius: 12px;
     }
+
     h1 {
       color: #00bfff;
-      margin: 20px 0;
+      margin: 15px 0 10px 0;
+      font-size: 2.2rem;
     }
-    button {
+
+    .btn {
+      position: absolute;
+      left: 50%;
+      top: 68%;               /* ← légèrement en dessous du centre (50% = centre, 68% = un peu plus bas) */
+      transform: translate(-50%, -50%);
       background: #00bfff;
       color: #000;
       border: none;
-      padding: 18px 40px;
+      padding: 16px 40px;
       font-size: 24px;
       font-weight: bold;
       border-radius: 12px;
       cursor: pointer;
-      box-shadow: 0 0 15px #00bfff;
+      box-shadow: 0 0 20px #00bfff;
+      white-space: nowrap;
       transition: all 0.3s;
-      margin-top: 30px;
     }
-    button:hover {
+
+    .btn:hover {
       background: #00e0ff;
-      transform: scale(1.05);
+      transform: translate(-50%, -50%) scale(1.05);
     }
   </style>
 </head>
 <body>
-  <img src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp" alt="Logo XRP">
-  
-  <h1>Sexy CSV</h1>
-  
-  <a href="Git%20csv/Sexy_CSV.html">
-    <button>Lance l'historique Kraken →</button>
-  </a>
+  <div class="container">
+    <img src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp" alt="Logo XRP">
+
+    <h1>Sexy CSV</h1>
+
+    <a href="Git%20csv/Sexy_CSV.html">
+      <button class="btn">Lance l'historique Kraken →</button>
+    </a>
+  </div>
 </body>
 </html>
