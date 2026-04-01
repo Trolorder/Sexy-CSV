@@ -14,12 +14,13 @@
       align-items: center;
       justify-content: center;
       font-family: Arial, sans-serif;
-      overflow: hidden; /* empêche le scroll inutile */
+      overflow: hidden;
     }
 
     .container {
-      position: relative;     /* important pour positionner le bouton dessus */
+      position: relative;
       max-width: 90%;
+      max-height: 90vh;
       text-align: center;
     }
 
@@ -34,12 +35,17 @@
       color: #00bfff;
       margin: 15px 0 10px 0;
       font-size: 2.2rem;
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-shadow: 0 0 10px #00bfff;
     }
 
     .btn {
       position: absolute;
       left: 50%;
-      top: 68%;               /* ← légèrement en dessous du centre (50% = centre, 68% = un peu plus bas) */
+      top: 65%;               /* ← plus bas que le centre : change en 60% si trop bas, 70% si trop haut */
       transform: translate(-50%, -50%);
       background: #00bfff;
       color: #000;
@@ -52,6 +58,7 @@
       box-shadow: 0 0 20px #00bfff;
       white-space: nowrap;
       transition: all 0.3s;
+      z-index: 10;            /* pour qu'il soit au-dessus de l'image */
     }
 
     .btn:hover {
@@ -67,7 +74,7 @@
     <h1>Sexy CSV</h1>
 
     <a href="Git%20csv/Sexy_CSV.html">
-      <button class="btn">Lance l'historique Kraken →</button>
+      <button class="btn">Lance l'historique →</button>
     </a>
   </div>
 </body>
