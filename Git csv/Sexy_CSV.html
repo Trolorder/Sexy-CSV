@@ -527,21 +527,25 @@
         let crosshairX = null, crosshairY = null;
         let barZoomLevel = 1, curveZoomLevel = 1;
         // =====================================================================
-        // IMAGE DE FOND DU GRAPHIQUE
-        // Mettez le chemin de votre image ici (même dossier = juste le nom du fichier)
-        // Exemple : 'monfond.png'  ou  'images/fond.jpg'
-        const CHART_BG_PATH = 'https://github.com/Trolorder/Sexy-CSV/blob/main/Git%20csv/74d219a0976b0559d75a9480848314fb.png';   // <-- MODIFIEZ ICI
-        const CHART_BG_OPACITY = 0.3; // opacité entre 0.0 et 1.0
-        // =====================================================================
-        let chartBgImage = null;
-        let mouseClientX = 0, mouseClientY = 0;
+// =====================================================================
+// IMAGE DE FOND DU GRAPHIQUE
+// =====================================================================
+const CHART_BG_PATH = 'https://raw.githubusercontent.com/Trolorder/Sexy-CSV/main/Git%20csv/74d219a0976b0559d75a9480848314fb.png';
+const CHART_BG_OPACITY = 0.25;   // 0.2 à 0.3 est souvent bien
 
-        // Chargement automatique de l'image au démarrage
-        if (CHART_BG_PATH) {
-            const img = new Image();
-            img.onload = () => { chartBgImage = img; if (chart) chart.draw(); };
-            img.src = CHART_BG_PATH;
-        }
+let chartBgImage = null;
+
+// Chargement de l'image
+if (CHART_BG_PATH) {
+    const img = new Image();
+    img.crossOrigin = "anonymous";   // bonne pratique
+    img.onload = () => { 
+        chartBgImage = img; 
+        if (chart) chart.draw(); 
+    };
+    img.onerror = () => console.error("Impossible de charger l'image de fond");
+    img.src = CHART_BG_PATH;
+}
 
         // Plugin image de fond — s'applique uniquement au chart à barres (balanceChart)
         const bgImagePlugin = {
