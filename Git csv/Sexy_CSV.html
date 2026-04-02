@@ -223,6 +223,8 @@
         #chartjs-custom-tooltip, #curve-tooltip {
             transition: opacity 0.15s ease, left 0.05s linear, top 0.05s linear, filter 3s ease;
         }
+        /* Boutons agrandir cachés en mode discret */
+        body.discreet .btn-expand { display: none !important; }
 
         .table-header {
             padding: 16px 24px;
@@ -570,25 +572,21 @@
         let crosshairX = null, crosshairY = null;
         let barZoomLevel = 1, curveZoomLevel = 1;
         // =====================================================================
-// =====================================================================
-// IMAGE DE FOND DU GRAPHIQUE
-// =====================================================================
-const CHART_BG_PATH = 'https://raw.githubusercontent.com/Trolorder/Sexy-CSV/main/Git%20csv/74d219a0976b0559d75a9480848314fb.png';
-const CHART_BG_OPACITY = 0.25;   // 0.2 à 0.3 est souvent bien
+        // IMAGE DE FOND DU GRAPHIQUE
+        // Mettez le chemin de votre image ici (même dossier = juste le nom du fichier)
+        // Exemple : 'monfond.png'  ou  'images/fond.jpg'
+        const CHART_BG_PATH = 'acd28e2e0261f20fce5e1fab8e61b8ac.PNG';   // <-- MODIFIEZ ICI
+        const CHART_BG_OPACITY = 0.18; // opacité entre 0.0 et 1.0
+        // =====================================================================
+        let chartBgImage = null;
+        let mouseClientX = 0, mouseClientY = 0;
 
-let chartBgImage = null;
-
-// Chargement de l'image
-if (CHART_BG_PATH) {
-    const img = new Image();
-    img.crossOrigin = "anonymous";   // bonne pratique
-    img.onload = () => { 
-        chartBgImage = img; 
-        if (chart) chart.draw(); 
-    };
-    img.onerror = () => console.error("Impossible de charger l'image de fond");
-    img.src = CHART_BG_PATH;
-}
+        // Chargement automatique de l'image au démarrage
+        if (CHART_BG_PATH) {
+            const img = new Image();
+            img.onload = () => { chartBgImage = img; if (chart) chart.draw(); };
+            img.src = CHART_BG_PATH;
+        }
 
         // Plugin image de fond — s'applique uniquement au chart à barres (balanceChart)
         const bgImagePlugin = {
@@ -1532,7 +1530,7 @@ if (CHART_BG_PATH) {
         // =====================================================================
         // IMAGE DE FOND DE LA CARD GRAPHIQUES PORTFOLIO
         // Mettez le chemin de votre image ici (même dossier = juste le nom du fichier)
-        const CHART_PG_PATH = 'https://github.com/Trolorder/Sexy-CSV/blob/main/Git%20csv/FgJzdVBXoAITHRX-4205413893.jpg?raw=true';      // <-- MODIFIEZ ICI  ex: 'fond2.png'
+        const CHART_PG_PATH = 'FgJzdVBXoAITHRX-4205413893.JPG';      // <-- MODIFIEZ ICI  ex: 'fond2.png'
         const CHART_PG_OPACITY = 0.18; // opacité entre 0.0 et 1.0
         // =====================================================================
         let chartPgImage = null;
