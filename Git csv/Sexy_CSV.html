@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kraken - Historique</title>
+    <title>Kraken - Historique Complet</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
@@ -185,8 +185,40 @@
             filter: blur(8px);
             transition: filter 3s ease;
         }
-        /* Bouton agrandir caché en mode discret */
-        body.discreet .btn-expand { display: none !important; }
+        /* Bouton flottant retour en haut */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9990;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: rgba(18, 26, 46, 0.85);
+            backdrop-filter: blur(8px);
+            color: #94a3b8;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+        #scrollTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #scrollTopBtn:hover {
+            background: rgba(18, 26, 46, 1);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+            color: #e2e8f0;
+            transform: translateX(-50%) translateY(-2px);
+        }
         /* Tooltip fluide */
         #chartjs-custom-tooltip, #curve-tooltip {
             transition: opacity 0.15s ease, left 0.05s linear, top 0.05s linear, filter 3s ease;
@@ -313,6 +345,7 @@
 <body>
     <div class="container">
         <h1 style="position:relative;">
+            📊 Historique Complet - Compte Kraken (2021 – 2026)
             <button onclick="toggleDiscreetMode()" id="discreetBtn"
                 style="position:absolute; right:0; top:50%; transform:translateY(-50%); background:#60a5fa; padding:8px 18px; font-size:0.85rem; border-radius:12px; color:white; font-weight:500;">
                 👁‍🗨 Mode normal
@@ -518,6 +551,18 @@
         </div>
     </div>
 
+    <!-- Bouton flottant retour en haut -->
+    <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+
+    <script>
+        // Afficher/masquer le bouton selon la position de scroll
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 300) btn.classList.add('visible');
+            else btn.classList.remove('visible');
+        }, { passive: true });
+    </script>
+
     <script>
         let allTransactions = [], filteredTransactions = [], selectedTypeFilters = [], selectedAssetFilters = [];
         let chart = null, currentSort = { col: 0, asc: false }, currentPage = 1, PAGE_SIZE = 10;
@@ -699,9 +744,9 @@ if (CHART_BG_PATH) {
             } catch (e) {
                 // Sur mobile ou si le fetch échoue, afficher juste le bouton file
                 document.getElementById('loading').innerHTML = `
-                    <div style="color:#94a3b8; margin-bottom:16px;">Aucun fichier.csv</div>
+                    <div style="color:#94a3b8; margin-bottom:16px;">Aucun fichier kraken.csv trouvé automatiquement.</div>
                     <label style="display:inline-block; background:#60a5fa; border-radius:12px; padding:14px 24px; cursor:pointer; color:white; font-size:1rem; font-weight:600;">
-                        📂 Charger mon fichier.CSV
+                        📂 Charger mon fichier CSV
                         <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
                     </label>`;
             }
@@ -829,11 +874,25 @@ if (CHART_BG_PATH) {
             if (type === 'bar') {
                 title.textContent = 'Retraits / Envois par Crypto par Mois';
                 setTimeout(() => {
+                    // Plugin image de fond pour la modale bar
+                    const modalBgBar = {
+                        id: 'modalBgBar',
+                        beforeDraw(c) {
+                            if (!chartBgImage) return;
+                            const { ctx, chartArea: { left, top, width, height } } = c;
+                            const iw = chartBgImage.naturalWidth, ih = chartBgImage.naturalHeight;
+                            const scale = Math.min(width / iw, height / ih);
+                            const sw = iw * scale, sh = ih * scale;
+                            ctx.save(); ctx.globalAlpha = CHART_BG_OPACITY;
+                            ctx.drawImage(chartBgImage, left + (width - sw) / 2, top + (height - sh) / 2, sw, sh);
+                            ctx.restore();
+                        }
+                    };
                     modalChartInstance = new Chart(canvas, {
                         type: chart.config.type,
                         data: JSON.parse(JSON.stringify(chart.config.data)),
                         options: { ...chart.config.options, maintainAspectRatio: false, responsive: true },
-                        plugins: [modalCrosshairPlugin]
+                        plugins: [modalCrosshairPlugin, modalBgBar]
                     });
                     let mBarZoom = 1;
                     canvas.addEventListener('wheel', (e) => {
@@ -848,11 +907,25 @@ if (CHART_BG_PATH) {
             } else {
                 title.textContent = 'Évolution Portfolio';
                 setTimeout(() => {
+                    // Plugin image de fond pour la modale curve
+                    const modalBgCurve = {
+                        id: 'modalBgCurve',
+                        beforeDraw(c) {
+                            if (!chartPgImage) return;
+                            const { ctx, chartArea: { left, top, width, height } } = c;
+                            const iw = chartPgImage.naturalWidth, ih = chartPgImage.naturalHeight;
+                            const scale = Math.min(width / iw, height / ih);
+                            const sw = iw * scale, sh = ih * scale;
+                            ctx.save(); ctx.globalAlpha = CHART_PG_OPACITY;
+                            ctx.drawImage(chartPgImage, left + (width - sw) / 2, top + (height - sh) / 2, sw, sh);
+                            ctx.restore();
+                        }
+                    };
                     modalChartInstance = new Chart(canvas, {
                         type: curveChartInstance.config.type,
                         data: JSON.parse(JSON.stringify(curveChartInstance.config.data)),
                         options: { ...curveChartInstance.config.options, maintainAspectRatio: false, responsive: true },
-                        plugins: [modalCrosshairPlugin]
+                        plugins: [modalCrosshairPlugin, modalBgCurve]
                     });
                     let mCurveZoom = 1;
                     canvas.addEventListener('wheel', (e) => {
