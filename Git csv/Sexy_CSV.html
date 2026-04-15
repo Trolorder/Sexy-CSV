@@ -223,8 +223,6 @@
         #chartjs-custom-tooltip, #curve-tooltip {
             transition: opacity 0.15s ease, left 0.05s linear, top 0.05s linear, filter 3s ease;
         }
-        /* Boutons agrandir cachés en mode discret */
-        body.discreet .btn-expand { display: none !important; }
 
         .table-header {
             padding: 16px 24px;
@@ -347,7 +345,7 @@
 <body>
     <div class="container">
         <h1 style="position:relative;">
-            
+            📊 Historique Complet - Compte Kraken (2021 – 2026)
             <button onclick="toggleDiscreetMode()" id="discreetBtn"
                 style="position:absolute; right:0; top:50%; transform:translateY(-50%); background:#60a5fa; padding:8px 18px; font-size:0.85rem; border-radius:12px; color:white; font-weight:500;">
                 👁‍🗨 Mode normal
@@ -367,7 +365,7 @@
         </div>
 
         <div id="loading" style="text-align:center; padding:80px; color:#60a5fa; font-size:1.3em;">
-            Chargement du fichier.csv...
+            Chargement du fichier kraken.csv...
             <div style="margin-top:24px;">
                 <label style="display:inline-block; background:#1a2338; border:1px solid var(--border); border-radius:12px; padding:12px 20px; cursor:pointer; color:#60a5fa; font-size:0.95rem;">
                     📂 Ou choisir un fichier CSV
@@ -465,6 +463,7 @@
                         <option value="trade">Trade</option>
                         <option value="staking">Staking</option>
                         <option value="earn">Earn</option>
+                        <option value="receive">Reçu</option>
                     </select>
                     <div id="selectedTypes" style="margin-top:6px;"></div>
                 </div>
@@ -571,7 +570,6 @@
         let currentHoldings = {}, manualHoldings = {}, manualPrices = {};
         let crosshairX = null, crosshairY = null;
         let barZoomLevel = 1, curveZoomLevel = 1;
-        // =====================================================================
         // =====================================================================
 // =====================================================================
 // IMAGE DE FOND DU GRAPHIQUE
@@ -747,7 +745,7 @@ if (CHART_BG_PATH) {
             } catch (e) {
                 // Sur mobile ou si le fetch échoue, afficher juste le bouton file
                 document.getElementById('loading').innerHTML = `
-                    <div style="color:#94a3b8; margin-bottom:16px;">Aucun fichier.csv trouvé automatiquement.</div>
+                    <div style="color:#94a3b8; margin-bottom:16px;">Aucun fichier kraken.csv trouvé automatiquement.</div>
                     <label style="display:inline-block; background:#60a5fa; border-radius:12px; padding:14px 24px; cursor:pointer; color:white; font-size:1rem; font-weight:600;">
                         📂 Charger mon fichier CSV
                         <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
@@ -1532,7 +1530,6 @@ if (CHART_BG_PATH) {
         let cursorX = null, cursorY = null;
         let modalZoomLevel = 1;
 
-
         // =====================================================================
         // IMAGE DE FOND DE LA CARD GRAPHIQUES PORTFOLIO
         // Mettez le chemin de votre image ici (même dossier = juste le nom du fichier)
@@ -1545,7 +1542,7 @@ if (CHART_BG_PATH) {
             imgPg.onload = () => { chartPgImage = imgPg; };
             imgPg.src = CHART_PG_PATH;
         }
-        
+
         const bgImagePgPlugin = {
             id: 'bgImagePg',
             beforeDraw(c) {
