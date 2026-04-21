@@ -758,6 +758,8 @@ if (CHART_BG_PATH) {
         function saveManualPrices() { storageSet('krakenManualPrices', JSON.stringify(manualPrices)); }
 
         async function loadData() {
+            // Brancher l'input file
+            document.getElementById('csvFileInput').addEventListener('change', loadFromFile);
             try {
                 const response = await fetch('kraken.csv');
                 if (!response.ok) throw new Error('Fichier non trouvé');
@@ -1830,14 +1832,9 @@ if (CHART_BG_PATH) {
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Brancher l'input file immédiatement, sans attendre l'adapter
-            document.getElementById('csvFileInput').addEventListener('change', loadFromFile);
-
-            // Charger l'adapter puis tenter le fetch automatique
             const s = document.createElement('script');
             s.src = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js';
             s.onload = loadData;
-            s.onerror = loadData; // Si l'adapter échoue, on essaie quand même
             document.head.appendChild(s);
         });
     </script>
