@@ -365,11 +365,11 @@
         </div>
 
         <div id="loading" style="text-align:center; padding:80px; color:#60a5fa; font-size:1.3em;">
-            <div id="loadingMsg">Chargement du fichier kraken.csv...</div>
+            Chargement du fichier kraken.csv...
             <div style="margin-top:24px;">
                 <label style="display:inline-block; background:#1a2338; border:1px solid var(--border); border-radius:12px; padding:12px 20px; cursor:pointer; color:#60a5fa; font-size:0.95rem;">
                     📂 Ou choisir un fichier CSV
-                    <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+                    <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
                 </label>
             </div>
         </div>
@@ -758,16 +758,19 @@ if (CHART_BG_PATH) {
         function saveManualPrices() { storageSet('krakenManualPrices', JSON.stringify(manualPrices)); }
 
         async function loadData() {
-            // Brancher l'input file
-            document.getElementById('csvFileInput').addEventListener('change', loadFromFile);
             try {
                 const response = await fetch('kraken.csv');
                 if (!response.ok) throw new Error('Fichier non trouvé');
                 const csvText = await response.text();
                 parseAndInit(csvText);
             } catch (e) {
-                document.getElementById('loadingMsg').innerHTML =
-                    `<span style="color:#94a3b8; font-size:0.95rem;">Aucun fichier kraken.csv trouvé — chargez le manuellement :</span>`;
+                // Sur mobile ou si le fetch échoue, afficher juste le bouton file
+                document.getElementById('loading').innerHTML = `
+                    <div style="color:#94a3b8; margin-bottom:16px;">Aucun fichier kraken.csv trouvé automatiquement.</div>
+                    <label style="display:inline-block; background:#60a5fa; border-radius:12px; padding:14px 24px; cursor:pointer; color:white; font-size:1rem; font-weight:600;">
+                        📂 Charger mon fichier CSV
+                        <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
+                    </label>`;
             }
         }
 
