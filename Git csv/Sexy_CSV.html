@@ -365,13 +365,11 @@
         </div>
 
         <div id="loading" style="text-align:center; padding:80px; color:#60a5fa; font-size:1.3em;">
-            Chargement du fichier kraken.csv...
-            <div style="margin-top:24px;">
-                <label style="display:inline-block; background:#1a2338; border:1px solid var(--border); border-radius:12px; padding:12px 20px; cursor:pointer; color:#60a5fa; font-size:0.95rem;">
-                    📂 Ou choisir un fichier CSV
-                    <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
-                </label>
-            </div>
+            <div style="color:#94a3b8; margin-bottom:20px; font-size:0.95rem;">Chargez votre fichier CSV Kraken pour commencer</div>
+            <label style="display:inline-block; background:#60a5fa; border-radius:12px; padding:14px 28px; cursor:pointer; color:white; font-size:1rem; font-weight:600;">
+                📂 Charger mon fichier CSV
+                <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+            </label>
         </div>
 
         <div class="summary card" id="summary" style="display:none;"></div>
@@ -478,6 +476,27 @@
             <div style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
                 <button onclick="exportFilteredCSV()">📥 Exporter CSV filtré</button>
                 <button onclick="resetAllFilters()">🔄 Réinitialiser tout</button>
+            </div>
+            <!-- Résumé de la période filtrée — visible uniquement si filtres actifs -->
+            <div id="filterSummary" style="display:none; margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;">
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Dépôts EUR (période)</div>
+                        <div id="filterSummaryDeposits" class="discreet-hide" style="font-size:1.4rem; font-weight:700; color:#4ade80;"></div>
+                    </div>
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Retraits EUR (période)</div>
+                        <div id="filterSummaryWithdrawals" class="discreet-hide" style="font-size:1.4rem; font-weight:700; color:#f87171;"></div>
+                    </div>
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Investi net (période)</div>
+                        <div id="filterSummaryNet" class="discreet-hide" style="font-size:1.4rem; font-weight:700;"></div>
+                    </div>
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Transactions</div>
+                        <div id="filterSummaryCount" style="font-size:1.4rem; font-weight:700; color:#60a5fa;"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -737,20 +756,7 @@ if (CHART_BG_PATH) {
         function saveManualPrices() { storageSet('krakenManualPrices', JSON.stringify(manualPrices)); }
 
         async function loadData() {
-            try {
-                const response = await fetch('kraken.csv');
-                if (!response.ok) throw new Error('Fichier non trouvé');
-                const csvText = await response.text();
-                parseAndInit(csvText);
-            } catch (e) {
-                // Sur mobile ou si le fetch échoue, afficher juste le bouton file
-                document.getElementById('loading').innerHTML = `
-                    <div style="color:#94a3b8; margin-bottom:16px;">Aucun fichier kraken.csv trouvé automatiquement.</div>
-                    <label style="display:inline-block; background:#60a5fa; border-radius:12px; padding:14px 24px; cursor:pointer; color:white; font-size:1rem; font-weight:600;">
-                        📂 Charger mon fichier CSV
-                        <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
-                    </label>`;
-            }
+            // Plus de fetch automatique - le fichier est chargé via l'input
         }
 
         function loadFromFile(event) {
@@ -1330,7 +1336,34 @@ if (CHART_BG_PATH) {
             }, { passive: false });
         }
 
-        function applyFilters() {
+        function updateFilterSummary() {
+            const hasFilters = document.getElementById('search').value.trim() !== ''
+                || document.getElementById('dateFrom').value !== ''
+                || document.getElementById('dateTo').value !== ''
+                || selectedTypeFilters.length > 0
+                || selectedAssetFilters.length > 0;
+
+            const summary = document.getElementById('filterSummary');
+            if (!hasFilters) { summary.style.display = 'none'; return; }
+
+            // Calculer sur filteredTransactions (sans le filtre de quantité)
+            const deposits = filteredTransactions
+                .filter(t => t.type === 'deposit' && t.asset.includes('EUR') && t.amount > 0)
+                .reduce((s, t) => s + t.amount, 0);
+            const withdrawals = filteredTransactions
+                .filter(t => t.type === 'withdrawal' && t.asset.includes('EUR') && t.amount < 0)
+                .reduce((s, t) => s + Math.abs(t.amount), 0);
+            const net = deposits - withdrawals;
+
+            document.getElementById('filterSummaryDeposits').textContent = `+${deposits.toFixed(2)} €`;
+            document.getElementById('filterSummaryWithdrawals').textContent = `-${withdrawals.toFixed(2)} €`;
+            const netEl = document.getElementById('filterSummaryNet');
+            netEl.textContent = `${net >= 0 ? '+' : ''}${net.toFixed(2)} €`;
+            netEl.style.color = net >= 0 ? '#4ade80' : '#f87171';
+            document.getElementById('filterSummaryCount').textContent = filteredTransactions.length;
+
+            summary.style.display = 'block';
+        }
             const search = document.getElementById('search').value.toLowerCase().trim();
             const from = document.getElementById('dateFrom').value;
             const to = document.getElementById('dateTo').value;
@@ -1353,6 +1386,7 @@ if (CHART_BG_PATH) {
             currentPage = 1;
             renderTable();
             createOrUpdateChart(filteredTransactions);
+            updateFilterSummary();
         }
 
         function renderTable() {
@@ -1523,6 +1557,7 @@ if (CHART_BG_PATH) {
             currentPage = 1;
             renderTable();
             createOrUpdateChart(allTransactions);
+            updateFilterSummary();
         }
 
         let portfolioChartCollapsed = false;
@@ -1785,9 +1820,14 @@ if (CHART_BG_PATH) {
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Brancher l'input file immédiatement, sans attendre l'adapter
+            document.getElementById('csvFileInput').addEventListener('change', loadFromFile);
+
+            // Charger l'adapter puis tenter le fetch automatique
             const s = document.createElement('script');
             s.src = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js';
             s.onload = loadData;
+            s.onerror = loadData; // Si l'adapter échoue, on essaie quand même
             document.head.appendChild(s);
         });
     </script>
