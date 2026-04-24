@@ -481,6 +481,8 @@
             <div id="filterSummary" style="display:none;"></div>
         </div>
 
+        <div id="filterSummaryWrapper"></div>
+
         <div class="card" id="chartContainer" style="display:none;">
             <div style="padding:16px 24px; background:#1a2338; display:flex; justify-content:flex-end; gap:8px; border-bottom:1px solid var(--border);">
                 <button onclick="openChartModal('bar')" class="btn-expand" style="background:#1e2a47; color:#94a3b8; border:1px solid var(--border); padding:8px 14px; font-size:0.85rem; border-radius:12px; font-weight:600;">⛶ Agrandir</button>
@@ -1322,10 +1324,8 @@ if (CHART_BG_PATH) {
             const dateTo = document.getElementById('dateTo').value;
             const hasDateFilter = dateFrom !== '' || dateTo !== '';
 
-            const summary = document.getElementById('filterSummary');
-
-            // N'afficher que si au moins une date est définie
-            if (!hasDateFilter) { summary.style.display = 'none'; return; }
+            const wrapper = document.getElementById('filterSummaryWrapper');
+            if (!hasDateFilter) { wrapper.innerHTML = ''; return; }
 
             const deposits = filteredTransactions
                 .filter(t => t.type === 'deposit' && t.asset.includes('EUR') && t.amount > 0)
@@ -1335,18 +1335,16 @@ if (CHART_BG_PATH) {
                 .reduce((s, t) => s + Math.abs(t.amount), 0);
             const net = deposits - withdrawals;
 
-            // Formater les dates en jj/mm/aaaa
             const fmt = d => d ? d.split('-').reverse().join('/') : '…';
             const label = `Investi net du ${fmt(dateFrom)} au ${fmt(dateTo)}`;
 
-            summary.innerHTML = `
-                <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-                    <span style="color:#94a3b8; font-size:0.9rem;">${label}</span>
-                    <span class="discreet-hide" style="font-size:1.5rem; font-weight:700; color:${net >= 0 ? '#4ade80' : '#f87171'};">
+            wrapper.innerHTML = `
+                <div class="card" style="padding:18px 28px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+                    <span style="color:#94a3b8; font-size:0.95rem;">📅 ${label}</span>
+                    <span class="discreet-hide" style="font-size:1.6rem; font-weight:700; color:${net >= 0 ? '#4ade80' : '#f87171'};">
                         ${net >= 0 ? '+' : ''}${net.toFixed(2)} €
                     </span>
                 </div>`;
-            summary.style.display = 'block';
         }
 
         function applyFilters() {
