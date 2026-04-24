@@ -102,7 +102,7 @@
             border: 1px solid var(--border);
         }
 
-        .controls { padding: 28px 24px; }
+        .controls { padding: 28px 24px; overflow: visible; }
         .filters-grid { display: grid; grid-template-columns: 2.2fr 1.1fr 1.1fr 1.2fr 1.2fr; gap: 20px; }
 
         .filter-group { display: flex; flex-direction: column; gap: 8px; }
@@ -477,10 +477,10 @@
                 <button onclick="exportFilteredCSV()">📥 Exporter CSV filtré</button>
                 <button onclick="resetAllFilters()">🔄 Réinitialiser tout</button>
             </div>
-            <!-- Résumé filtré — visible uniquement si filtre de date actif -->
+            <div id="filterSummaryWrapper"></div>
         </div>
 
-        <div id="filterSummaryWrapper"></div>
+
 
         <div class="card" id="chartContainer" style="display:none;">
             <div style="padding:16px 24px; background:#1a2338; display:flex; justify-content:flex-end; gap:8px; border-bottom:1px solid var(--border);">
@@ -1338,7 +1338,7 @@ if (CHART_BG_PATH) {
             const label = `Investi net du ${fmt(dateFrom)} au ${fmt(dateTo)}`;
 
             wrapper.innerHTML = `
-                <div class="card" style="padding:18px 28px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+                <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
                     <span style="color:#94a3b8; font-size:0.95rem;">📅 ${label}</span>
                     <span class="discreet-hide" style="font-size:1.6rem; font-weight:700; color:${net >= 0 ? '#4ade80' : '#f87171'};">
                         ${net >= 0 ? '+' : ''}${net.toFixed(2)} €
