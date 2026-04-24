@@ -450,8 +450,8 @@
         <div class="controls card" id="controls" style="display:none;">
             <div class="filters-grid">
                 <div class="filter-group"><label>Rechercher</label><input type="text" id="search" placeholder="Asset ou type..." onkeyup="applyFilters()"></div>
-                <div class="filter-group"><label>Date du</label><input type="date" id="dateFrom" onchange="applyFilters()"></div>
-                <div class="filter-group"><label>Date au</label><input type="date" id="dateTo" onchange="applyFilters()"></div>
+                <div class="filter-group"><label>Date du</label><input type="date" id="dateFrom" onchange="applyFilters()" oninput="applyFilters()"></div>
+                <div class="filter-group"><label>Date au</label><input type="date" id="dateTo" onchange="applyFilters()" oninput="applyFilters()"></div>
                 <div class="filter-group">
                     <label>Type</label>
                     <select id="typeFilter" onchange="addTypeFilter()">
@@ -478,7 +478,6 @@
                 <button onclick="resetAllFilters()">🔄 Réinitialiser tout</button>
             </div>
             <!-- Résumé filtré — visible uniquement si filtre de date actif -->
-            <div id="filterSummary" style="display:none;"></div>
         </div>
 
         <div id="filterSummaryWrapper"></div>
