@@ -58,12 +58,19 @@
             user-select: none;
         }
 
+        /* Masquer le trait en bas du header quand le contenu est replié */
+        .card-header {
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .card-header:has(+ .collapsible-content:not(.collapsed)) {
+            border-bottom-color: var(--border);
+        }
+
         .card-header h2 {
             margin: 0;
             font-size: 1.5rem;
         }
-
-        .toggle-icon {
             font-size: 1.4rem;
             transition: transform 0.3s ease;
             flex-shrink: 0;
