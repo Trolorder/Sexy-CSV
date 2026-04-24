@@ -58,13 +58,9 @@
             user-select: none;
         }
 
-        /* Masquer le trait en bas du header quand le contenu est replié */
-        .card-header {
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.3s ease;
-        }
-        .card-header:has(+ .collapsible-content:not(.collapsed)) {
-            border-bottom-color: var(--border);
+        /* Card sans bordure basse quand repliée */
+        .card.collapsed-card {
+            border-bottom-color: transparent;
         }
 
         .card-header h2 {
@@ -714,8 +710,10 @@ if (CHART_BG_PATH) {
             manualCollapsed = !manualCollapsed;
             const content = document.getElementById('manualCollapsible');
             const icon = document.getElementById('manualToggleIcon');
+            const card = document.getElementById('manualCard');
             content.classList.toggle('collapsed', manualCollapsed);
             icon.style.transform = manualCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+            card.style.borderBottomColor = manualCollapsed ? 'transparent' : '';
         }
 
         function togglePortfolioSection() {
