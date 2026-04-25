@@ -431,7 +431,8 @@
 
       try {
         /* 1. Récupération du solde via XRPL public node */
-        const xrplRes = await fetch('https://s1.ripple.com:51234/', {
+        // APRÈS
+        const xrplRes = await fetch('https://xrplcluster.com', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
