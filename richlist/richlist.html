@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XRP Richlist – Check My Rank</title>
+  <style>
+    /* =============================================
+       BASE
+       ============================================= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #000;        /* ← fond de page */
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px 60px;       /* ← espacement haut/côtés/bas de la page */
+      color: #fff;
+    }
+
+    /* =============================================
+       LIEN RETOUR
+       ============================================= */
+    .back-link {
+      align-self: flex-start;
+      color: #00bfff;               /* ← couleur du lien */
+      text-decoration: none;
+      font-size: 0.95rem;
+      margin-bottom: 40px;          /* ← espace sous le lien retour */
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+
+    /* =============================================
+       TITRE
+       ============================================= */
+    h1 {
+      color: #00bfff;
+      font-size: clamp(1.6rem, 5vw, 2.6rem); /* ← taille du titre */
+      text-shadow: 0 0 20px #00bfff;
+      text-align: center;
+      margin-bottom: 8px;                    /* ← espace sous le titre */
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.45);         /* ← couleur du sous-titre */
+      font-size: 0.95rem;
+      text-align: center;
+      margin-bottom: 40px;                   /* ← espace sous le sous-titre */
+    }
+
+    /* =============================================
+       CARTE PRINCIPALE (formulaire + résultats)
+       ============================================= */
+    .card {
+      background: rgba(255,255,255,0.04);  /* ← fond de la carte (transparence) */
+      border: 1px solid rgba(0,191,255,0.2); /* ← bordure de la carte */
+      border-radius: 20px;                 /* ← arrondi des coins */
+      padding: 36px 32px;                  /* ← espace intérieur haut/bas gauche/droite */
+      width: 100%;
+      max-width: 580px;                    /* ← largeur max de la carte */
+    }
+
+    /* =============================================
+       CHAMP DE SAISIE D'ADRESSE
+       ============================================= */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;                   /* ← espace entre le champ et le bouton */
+      margin-bottom: 24px;         /* ← espace sous la ligne input+bouton */
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: rgba(255,255,255,0.07); /* ← fond du champ de texte */
+      border: 1px solid rgba(0,191,255,0.25);
+      border-radius: 50px;
+      padding: 14px 22px;                 /* ← taille interne du champ */
+      font-size: 0.95rem;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
+    input[type="text"):focus { border-color: #00bfff; }
+    input[type="text"]:focus { border-color: #00bfff; }
+
+    /* Bouton Search */
+    .btn {
+      background: #00bfff;           /* ← couleur du bouton */
+      color: #000;
+      border: none;
+      padding: 14px 28px;            /* ← taille du bouton */
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,191,255,0.5); /* ← halo du bouton */
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .btn:hover {
+      background: #00e0ff;
+      transform: scale(1.05);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* =============================================
+       ZONE DE RÉSULTATS
+       ============================================= */
+    #result-area { display: none; }
+
+    /* Message d'erreur */
+    .error-msg {
+      background: rgba(255,60,60,0.1);
+      border: 1px solid rgba(255,60,60,0.3);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #ff6b6b;              /* ← couleur du message d'erreur */
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    /* Bloc de stats (solde + rang) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* ← 2 colonnes côte à côte */
+      gap: 14px;                       /* ← espace entre les cases */
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: rgba(0,191,255,0.06);  /* ← fond des cases de stats */
+      border: 1px solid rgba(0,191,255,0.15);
+      border-radius: 14px;
+      padding: 18px 16px;               /* ← espace intérieur des cases */
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 1.5rem;               /* ← taille des chiffres dans les cases */
+      font-weight: bold;
+      color: #00bfff;
+    }
+    .stat-value.big {
+      font-size: 1.2rem;               /* ← taille pour les grands nombres */
+    }
+
+    /* Badge de tier (Whale, Shark, etc.) */
+    .tier-box {
+      border-radius: 16px;
+      padding: 22px;                   /* ← espace intérieur du badge de tier */
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .tier-emoji {
+      font-size: 2.8rem;               /* ← taille de l'emoji du tier */
+      display: block;
+      margin-bottom: 8px;
+    }
+    .tier-name {
+      font-size: 1.4rem;               /* ← taille du nom du tier */
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .tier-desc {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    /* Barre de progression */
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 6px;
+    }
+    .progress-bar-bg {
+      background: rgba(255,255,255,0.08); /* ← fond de la barre */
+      border-radius: 50px;
+      height: 8px;                        /* ← épaisseur de la barre */
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 50px;
+      background: linear-gradient(90deg, #00bfff, #00ff88); /* ← couleurs de la barre */
+      transition: width 1s ease;
+    }
+
+    /* Note de bas de carte */
+    .disclaimer {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.25); /* ← couleur de la note */
+      text-align: center;
+      line-height: 1.5;
+      margin-top: 10px;
+    }
+    .disclaimer a {
+      color: rgba(0,191,255,0.5);
+      text-decoration: none;
+    }
+    .disclaimer a:hover { color: #00bfff; }
+
+    /* Spinner de chargement */
+    .spinner {
+      display: none;
+      width: 36px; height: 36px;
+      border: 3px solid rgba(0,191,255,0.2);
+      border-top-color: #00bfff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* =============================================
+       RESPONSIVE MOBILE
+       ============================================= */
+    @media (max-width: 480px) {
+      .card { padding: 24px 18px; }
+      .stats-grid { grid-template-columns: 1fr; } /* ← 1 colonne sur mobile */
+      .input-row { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LIEN RETOUR — modifie href si ton index est ailleurs -->
+  <a class="back-link" href="../index.html">← Retour à l'accueil</a>
+
+  <!-- TITRE — modifie librement -->
+  <h1>🏆 XRP Richlist Rank</h1>
+  <p class="subtitle">Entre ton adresse XRP pour voir où tu te situes dans le classement mondial</p>
+
+  <div class="card">
+
+    <!-- FORMULAIRE -->
+    <label for="address-input">Adresse XRP</label>
+    <div class="input-row">
+      <input
+        type="text"
+        id="address-input"
+        placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <button class="btn" id="check-btn" onclick="checkRank()">Vérifier</button>
+    </div>
+
+    <!-- SPINNER -->
+    <div class="spinner" id="spinner"></div>
+
+    <!-- ZONE DE RÉSULTATS (cachée au départ) -->
+    <div id="result-area">
+
+      <!-- Message d'erreur (s'affiche si adresse invalide) -->
+      <div class="error-msg" id="error-msg" style="display:none;"></div>
+
+      <!-- Contenu résultats -->
+      <div id="result-content" style="display:none;">
+
+        <!-- Cases solde + rang -->
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Solde XRP</div>
+            <div class="stat-value big" id="balance-val">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Rang estimé</div>
+            <div class="stat-value" id="rank-val">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Top</div>
+            <div class="stat-value" id="percentile-val">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Comptes actifs</div>
+            <div class="stat-value big">~5.8M</div>
+          </div>
+        </div>
+
+        <!-- Badge tier -->
+        <div class="tier-box" id="tier-box">
+          <span class="tier-emoji" id="tier-emoji">🐟</span>
+          <div class="tier-name" id="tier-name">—</div>
+          <div class="tier-desc" id="tier-desc">—</div>
+        </div>
+
+        <!-- Barre de progression dans le classement -->
+        <div class="progress-label">
+          <span>Plankton</span>
+          <span>Whale 🐋</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+
+        <p class="disclaimer">
+          Rang estimé d'après la distribution connue du Ledger XRP.<br>
+          Données de solde via <a href="https://xrplcluster.com" target="_blank">XRPL Cluster</a> •
+          Classement via <a href="https://xrpscan.com" target="_blank">XRPSCAN</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =============================================
+       SEUILS DES TIERS XRP
+       Tu peux ajuster les montants en XRP ici
+       ============================================= */
+    const TIERS = [
+      {
+        name: "Whale",
+        emoji: "🐋",
+        minXRP: 1_000_000,
+        desc: "Moins de 0.01% des holders — tu fais partie de l'élite absolue",
+        color: "#1a1a4e",
+        textColor: "#a0c4ff",
+        percentileMax: 0.01
+      },
+      {
+        name: "Shark",
+        emoji: "🦈",
+        minXRP: 100_000,
+        desc: "Top 0.1% — un portefeuille de grande envergure",
+        color: "#1a2a3a",
+        textColor: "#7ecfff",
+        percentileMax: 0.1
+      },
+      {
+        name: "Dolphin",
+        emoji: "🐬",
+        minXRP: 10_000,
+        desc: "Top 1% — sérieusement positionné sur le XRP",
+        color: "#0d2a2a",
+        textColor: "#4deeea",
+        percentileMax: 1
+      },
+      {
+        name: "Fish",
+        emoji: "🐠",
+        minXRP: 1_000,
+        desc: "Top 5% — un bon portefeuille XRP",
+        color: "#1a2a1a",
+        textColor: "#7dff9a",
+        percentileMax: 5
+      },
+      {
+        name: "Shrimp",
+        emoji: "🦐",
+        minXRP: 100,
+        desc: "Top 20% — tu accumules, continue !",
+        color: "#2a2010",
+        textColor: "#ffd080",
+        percentileMax: 20
+      },
+      {
+        name: "Plankton",
+        emoji: "🌊",
+        minXRP: 0,
+        desc: "Petit solde — chaque XRP compte, bienvenue !",
+        color: "#1a1010",
+        textColor: "#ff9090",
+        percentileMax: 100
+      }
+    ];
+
+    /* Nombre total de comptes actifs estimés */
+    const TOTAL_ACCOUNTS = 5_800_000;
+
+    /* Correspondance XRP → rang estimé */
+    function estimateRank(xrp) {
+      if (xrp >= 1_000_000) return Math.round(TOTAL_ACCOUNTS * 0.0001);
+      if (xrp >= 500_000)   return Math.round(TOTAL_ACCOUNTS * 0.0003);
+      if (xrp >= 100_000)   return Math.round(TOTAL_ACCOUNTS * 0.001);
+      if (xrp >= 50_000)    return Math.round(TOTAL_ACCOUNTS * 0.003);
+      if (xrp >= 10_000)    return Math.round(TOTAL_ACCOUNTS * 0.01);
+      if (xrp >= 5_000)     return Math.round(TOTAL_ACCOUNTS * 0.025);
+      if (xrp >= 1_000)     return Math.round(TOTAL_ACCOUNTS * 0.05);
+      if (xrp >= 500)       return Math.round(TOTAL_ACCOUNTS * 0.10);
+      if (xrp >= 100)       return Math.round(TOTAL_ACCOUNTS * 0.20);
+      if (xrp >= 50)        return Math.round(TOTAL_ACCOUNTS * 0.35);
+      if (xrp >= 10)        return Math.round(TOTAL_ACCOUNTS * 0.55);
+      return Math.round(TOTAL_ACCOUNTS * 0.80);
+    }
+
+    /* =============================================
+       FONCTION PRINCIPALE — appel API + affichage
+       ============================================= */
+    async function checkRank() {
+      const address = document.getElementById('address-input').value.trim();
+
+      /* Validation basique de l'adresse XRP */
+      if (!address.startsWith('r') || address.length < 25 || address.length > 35) {
+        showError("Adresse XRP invalide. Elle doit commencer par 'r' et faire 25–35 caractères.");
+        return;
+      }
+
+      setLoading(true);
+      hideError();
+
+      try {
+        /* 1. Récupération du solde via XRPL public node */
+        const xrplRes = await fetch('https://s1.ripple.com:51234/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            method: 'account_info',
+            params: [{ account: address, ledger_index: 'current' }]
+          })
+        });
+        const xrplData = await xrplRes.json();
+
+        if (xrplData.result.error) {
+          showError("Adresse introuvable sur le Ledger XRP. Vérifie qu'elle est bien active (funded).");
+          setLoading(false);
+          return;
+        }
+
+        /* Balance en drops → XRP (1 XRP = 1 000 000 drops) */
+        const drops = parseInt(xrplData.result.account_data.Balance);
+        const xrp   = drops / 1_000_000;
+
+        /* 2. Tentative de récupération du rang réel via XRPSCAN */
+        let realRank = null;
+        try {
+          const scanRes = await fetch(`https://api.xrpscan.com/api/v1/account/${address}`);
+          if (scanRes.ok) {
+            const scanData = await scanRes.json();
+            /* XRPSCAN renvoie parfois un champ 'rank' selon la version d'API */
+            if (scanData.rank) realRank = scanData.rank;
+          }
+        } catch (_) { /* XRPSCAN optionnel, pas bloquant */ }
+
+        /* 3. Calcul rang + tier */
+        const rank       = realRank || estimateRank(xrp);
+        const percentile = ((rank / TOTAL_ACCOUNTS) * 100);
+        const tier       = TIERS.find(t => xrp >= t.minXRP);
+
+        /* 4. Affichage */
+        displayResult(xrp, rank, percentile, tier, !!realRank);
+
+      } catch (err) {
+        showError("Impossible de contacter le réseau XRP. Vérifie ta connexion et réessaie.");
+        console.error(err);
+      }
+
+      setLoading(false);
+    }
+
+    /* =============================================
+       AFFICHAGE DES RÉSULTATS
+       ============================================= */
+    function displayResult(xrp, rank, percentile, tier, isRealRank) {
+      /* Solde */
+      document.getElementById('balance-val').textContent =
+        xrp >= 1000
+          ? xrp.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' XRP'
+          : xrp.toFixed(2) + ' XRP';
+
+      /* Rang */
+      document.getElementById('rank-val').textContent =
+        '#' + rank.toLocaleString('fr-FR') + (isRealRank ? '' : '*');
+
+      /* Percentile */
+      const pct = percentile < 0.01
+        ? '< 0.01%'
+        : percentile.toFixed(2) + '%';
+      document.getElementById('percentile-val').textContent = pct;
+
+      /* Tier badge */
+      const tierBox = document.getElementById('tier-box');
+      tierBox.style.background  = tier.color;
+      tierBox.style.border      = `1px solid ${tier.textColor}44`;
+      document.getElementById('tier-emoji').textContent = tier.emoji;
+      document.getElementById('tier-name').textContent  = tier.name;
+      document.getElementById('tier-name').style.color  = tier.textColor;
+      document.getElementById('tier-desc').textContent  = tier.desc;
+
+      /* Barre de progression (inversée : 0% = whale, 100% = plankton) */
+      const progressPct = Math.min(100, Math.max(2, 100 - Math.log10(Math.max(1, xrp) + 1) * 15));
+      document.getElementById('progress-fill').style.width = (100 - progressPct) + '%';
+
+      /* Affichage */
+      document.getElementById('result-area').style.display = 'block';
+      document.getElementById('result-content').style.display = 'block';
+    }
+
+    /* =============================================
+       UTILITAIRES
+       ============================================= */
+    function setLoading(state) {
+      document.getElementById('spinner').style.display      = state ? 'block' : 'none';
+      document.getElementById('check-btn').disabled         = state;
+      document.getElementById('result-area').style.display  = state ? 'none' : 'block';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      document.getElementById('result-area').style.display = 'block';
+      document.getElementById('result-content').style.display = 'none';
+    }
+
+    function hideError() {
+      document.getElementById('error-msg').style.display = 'none';
+    }
+
+    /* Touche Entrée pour valider */
+    document.getElementById('address-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkRank();
+    });
+  </script>
+</body>
+</html>
