@@ -66,17 +66,17 @@
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* Compteur discret en bas à gauche - presque invisible */
+    /* Compteur mondial discret - presque invisible */
     .visit-counter {
       position: absolute;
       bottom: 15px;
       left: 20px;
-      color: #1a1a1a;           /* très noir = presque invisible */
+      color: #1a1a1a;           /* très foncé = invisible sur fond noir */
       font-size: 12px;
       font-family: monospace;
       z-index: 5;
       pointer-events: none;
-      user-select: text;
+      user-select: text;        /* visible quand on fait Ctrl + A */
     }
   </style>
 </head>
@@ -89,16 +89,21 @@
       <button class="btn">Make your Kraken.csv file Sexy</button>
     </a>
 
+    <!-- Compteur discret -->
     <div class="visit-counter" id="visit-counter">
-      Visites : 0
+      Visites : ...
     </div>
   </div>
 
+  <!-- Ton script Counter.dev (compte les visites mondiales) -->
+  <script src="https://cdn.counter.dev/script.js" data-id="9d93fce1-b2c0-467f-ab06-fb3e9277bad1" data-utcoffset="1"></script>
+
   <script>
-    let count = parseInt(localStorage.getItem('krakenVisits')) || 0;
+    // Compteur local temporaire (pour avoir quelque chose d'affiché)
+    // Tu peux le supprimer plus tard si tu ne veux rien afficher
+    let count = parseInt(localStorage.getItem('krakenVisits')) || 42;
     count += 1;
     localStorage.setItem('krakenVisits', count);
-
     document.getElementById('visit-counter').textContent = `Visites : ${count}`;
   </script>
 
