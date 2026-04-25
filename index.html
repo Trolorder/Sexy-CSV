@@ -36,7 +36,7 @@
 
     h1 {
       position: absolute;
-      top: 21%;
+      top: 22%;
       left: 50%;
       transform: translateX(-50%);
       color: #00bfff;
@@ -70,24 +70,6 @@
       background: #00e0ff;
       transform: translateX(-50%) scale(1.05);
     }
-
-    /* Compteur rouge pour tests (tu peux le supprimer plus tard) */
-    .visit-counter {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #ff0000;
-      font-size: 42px;
-      font-weight: bold;
-      font-family: monospace;
-      z-index: 30;
-      background: rgba(0, 0, 0, 0.85);
-      padding: 20px 50px;
-      border-radius: 15px;
-      pointer-events: none;
-      user-select: text;
-    }
   </style>
 </head>
 <body>
@@ -100,21 +82,7 @@
     <a href="Git%20csv/Sexy_CSV.html">
       <button class="btn">Make your Kraken.csv file Sexy</button>
     </a>
-
-    <!-- Compteur rouge visible pour tests -->
-    <div class="visit-counter" id="visit-counter">
-      Visites : 00000
-    </div>
   </div>
-
-  <script>
-    // Compteur local pour tester facilement (augmente à chaque F5)
-    let count = parseInt(localStorage.getItem('testVisits')) || 0;
-    count += 1;
-    localStorage.setItem('testVisits', count);
-
-    document.getElementById('visit-counter').textContent = `Visites : ${count}`;
-  </script>
 
 </body>
 </html>
