@@ -368,7 +368,7 @@
             <div style="color:#94a3b8; margin-bottom:20px; font-size:0.95rem;">Chargez votre fichier CSV Kraken pour commencer</div>
             <label style="display:inline-block; background:#60a5fa; border-radius:12px; padding:14px 28px; cursor:pointer; color:white; font-size:1rem; font-weight:600;">
                 📂 Charger mon fichier CSV
-                <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+                <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="loadFromFile(event)">
             </label>
         </div>
 
