@@ -22,7 +22,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 15px;
+      overflow: hidden;
     }
 
     .container {
@@ -48,61 +49,64 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      padding-top: 8%;
       text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.75));
     }
 
     h1 {
       color: #00bfff;
-      font-size: 2.6rem;
-      text-shadow: 0 0 20px #00bfff;
-      margin-bottom: 30px;
+      font-size: 2.4rem;
+      text-shadow: 0 0 15px #00bfff;
+      margin-bottom: 40px;
       line-height: 1.2;
+      z-index: 10;
     }
 
     .btn {
       background: #00bfff;
       color: #000;
       border: none;
-      padding: 18px 50px;
-      font-size: 1.5rem;
+      padding: 16px 45px;
+      font-size: 1.55rem;
       font-weight: bold;
       border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 0 30px #00bfff;
       transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
+      z-index: 10;
     }
 
     .btn:hover {
       background: #00e0ff;
-      transform: scale(1.08);
-      box-shadow: 0 0 40px #00e0ff;
+      transform: scale(1.07);
     }
 
-    /* === Mobile === */
+    /* === Mobile - on garde le même style de position que tu aimais === */
     @media (max-width: 768px) {
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.75rem;
+        margin-bottom: 30px;
       }
+      
       .btn {
-        font-size: 1.3rem;
-        padding: 16px 40px;
+        font-size: 1.35rem;
+        padding: 15px 40px;
       }
+      
       .overlay {
-        padding: 30px 15px;
+        padding-top: 12%;
       }
     }
 
     @media (max-width: 480px) {
       h1 {
-        font-size: 1.55rem;
+        font-size: 1.45rem;
       }
+      
       .btn {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         padding: 14px 35px;
       }
     }
@@ -115,8 +119,9 @@
 
     <div class="overlay">
       <h1>1: Upload your .csv <br>2: Enjoy :)</h1>
-      <a href="Git%20csv/Sexy_CSV.html" class="btn">
-        Make your Kraken.csv file Sexy
+      
+      <a href="Git%20csv/Sexy_CSV.html">
+        <button class="btn">Make your Kraken.csv file Sexy</button>
       </a>
     </div>
   </div>
