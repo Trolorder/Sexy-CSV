@@ -100,11 +100,9 @@
   </div>
 
   <script>
-    // RÉINITIALISATION FORCÉE + compteur propre
-    localStorage.setItem('krakenVisits', '0');   // ← Force à 0
-
-    let count = 0;
-    count += 1;                                 // +1 au premier chargement
+    // Compteur qui fonctionne correctement
+    let count = parseInt(localStorage.getItem('krakenVisits')) || 0;
+    count = count + 1;                    // +1 à chaque chargement
 
     document.getElementById('visit-counter').textContent = `Visites : ${count}`;
 
