@@ -58,9 +58,12 @@
             user-select: none;
         }
 
-        /* Card sans bordure basse quand repliée */
-        .card.collapsed-card {
-            border-bottom-color: transparent;
+        /* Card Holdings manuels sans bordure basse quand repliée */
+        #manualCard {
+            transition: border-color 0.4s ease;
+        }
+        #manualCard.is-collapsed {
+            border-color: transparent;
         }
 
         .card-header h2 {
@@ -712,6 +715,7 @@ if (CHART_BG_PATH) {
             const icon = document.getElementById('manualToggleIcon');
             const card = document.getElementById('manualCard');
             content.classList.toggle('collapsed', manualCollapsed);
+            card.classList.toggle('is-collapsed', manualCollapsed);
             icon.style.transform = manualCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
             card.style.borderBottomColor = manualCollapsed ? 'transparent' : '';
         }
