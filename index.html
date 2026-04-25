@@ -11,8 +11,9 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      background-color: #000;
+      background-color: #000; /* ← couleur de fond de toute la page */
       font-family: Arial, sans-serif;
       min-height: 100vh;
       display: flex;
@@ -22,66 +23,85 @@
       padding: 20px;
       gap: 0;
     }
+
+    /* =============================================
+       TITRE PRINCIPAL ("1: Upload your .csv ...")
+       ============================================= */
     h1 {
-      color: #00bfff;
-      font-size: clamp(1.4rem, 4vw, 2.4rem);
-      text-shadow: 0 0 15px #00bfff;
+      color: #00bfff;                          /* ← couleur du texte */
+      font-size: clamp(1.4rem, 4vw, 2.4rem);  /* ← taille du texte (min, fluide, max) */
+      text-shadow: 0 0 15px #00bfff;          /* ← intensité du halo bleu */
       text-align: center;
       line-height: 1.4;
-      margin-bottom: 30px;
+      margin-bottom: 30px;                    /* ← espace SOUS le titre */
     }
+
+    /* =============================================
+       STYLE COMMUN DES BOUTONS
+       (s'applique aux 2 boutons)
+       ============================================= */
     .btn {
-      background: #00bfff;
-      color: #000;
+      background: #00bfff;           /* ← couleur de fond du bouton */
+      color: #000;                   /* ← couleur du texte du bouton */
       border: none;
-      padding: 16px 45px;
-      font-size: clamp(1.1rem, 3vw, 1.55rem);
+      padding: 16px 45px;            /* ← taille interne : haut/bas gauche/droite */
+      font-size: clamp(1.1rem, 3vw, 1.55rem); /* ← taille du texte */
       font-weight: bold;
-      border-radius: 50px;
+      border-radius: 50px;           /* ← arrondi des coins (50px = pilule) */
       cursor: pointer;
-      box-shadow: 0 0 30px #00bfff;
+      box-shadow: 0 0 30px #00bfff; /* ← intensité du halo lumineux */
       transition: all 0.3s ease;
       text-decoration: none;
       display: inline-block;
-      margin-bottom: 0;
     }
     .btn:hover {
-      background: #00e0ff;
-      transform: scale(1.07);
+      background: #00e0ff;           /* ← couleur au survol */
+      transform: scale(1.07);        /* ← grossissement au survol (1.07 = +7%) */
     }
+
+    /* =============================================
+       IMAGE XRP (le grand logo au centre)
+       ============================================= */
     .xrp-wrapper {
       width: 100%;
       max-width: 5000px;
-      margin-top: -10px;
+      margin-top: -10px;   /* ← rapproche l'image du bouton du dessus (valeur négative = monte) */
     }
     .xrp-wrapper img {
       width: 100%;
       height: auto;
       display: block;
       object-fit: cover;
-      object-position: center 60%;
-      max-height: 55vh;
+      object-position: center 60%;  /* ← cadrage de l'image (haut/bas en %) */
+      max-height: 55vh;             /* ← hauteur max de l'image (% de l'écran) */
       border-radius: 0 0 16px 16px;
       mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
     }
 
-    /* ✅ NOUVEAU : zone sous l'image */
+    /* =============================================
+       SECTION DU BAS (sous l'image XRP)
+       ============================================= */
     .bottom-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-top: 30px;
-      padding-bottom: 30px;
+      gap: 12px;              /* ← espace entre le sous-titre et le bouton */
+      margin-top: 30px;       /* ← espace ENTRE l'image et cette section (augmente = descend) */
+      padding-bottom: 30px;   /* ← espace en bas de la page */
     }
+
+    /* Sous-titre de la section richlist */
     .bottom-section h2 {
-      color: #00bfff;
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      text-shadow: 0 0 10px #00bfff;
+      color: #00bfff;                         /* ← couleur du texte */
+      font-size: clamp(1rem, 3vw, 1.4rem);    /* ← taille du texte */
+      text-shadow: 0 0 10px #00bfff;          /* ← halo bleu */
       text-align: center;
     }
 
+    /* =============================================
+       RESPONSIVE MOBILE
+       ============================================= */
     @media (max-width: 480px) {
       .xrp-wrapper {
         max-width: 100%;
@@ -95,10 +115,27 @@
   </style>
 </head>
 <body>
+
+  <!-- =============================================
+       TITRE EN HAUT DE PAGE
+       Pour changer le texte : modifie ce qui est entre <h1> et </h1>
+       ============================================= -->
   <h1>1: Upload your .csv<br>2: Enjoy :)</h1>
+
+
+  <!-- =============================================
+       BOUTON 1 — CSV TOOL
+       href="..." → chemin vers ta page CSV
+       ============================================= -->
   <a href="Git%20csv/Sexy_CSV.html">
     <button class="btn">Make MyFile.csv Sexy</button>
   </a>
+
+
+  <!-- =============================================
+       IMAGE XRP (logo central)
+       src="..." → remplace l'URL pour changer l'image
+       ============================================= -->
   <div class="xrp-wrapper">
     <img
       src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp"
@@ -106,12 +143,23 @@
     >
   </div>
 
-  <!-- ✅ NOUVEAU BOUTON -->
+
+  <!-- =============================================
+       SECTION DU BAS — RICHLIST
+       Pour repositionner vers le HAUT : réduis margin-top dans .bottom-section
+       Pour repositionner vers le BAS : augmente margin-top dans .bottom-section
+       ============================================= -->
   <div class="bottom-section">
+
+    <!-- Texte au-dessus du bouton richlist — modifie librement -->
     <h2>Where do you stand on the XRP Richlist?</h2>
+
+    <!-- BOUTON 2 — RICHLIST
+         href="..." → chemin vers ta page richlist -->
     <a href="richlist/index.html">
       <button class="btn">🏆 Check My Ranking</button>
     </a>
+
   </div>
 
 </body>
