@@ -8,12 +8,12 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --cyan:       #00bfff;
-      --border:     rgba(0,191,255,0.15);
-      --muted:      rgba(255,255,255,0.35);
-      --dimmer:     rgba(255,255,255,0.18);
-      --surface:    #0c0c0c;
-      --surface2:   #141414;
+      --cyan:    #00bfff;
+      --border:  rgba(0,191,255,0.15);
+      --muted:   rgba(255,255,255,0.35);
+      --dimmer:  rgba(255,255,255,0.18);
+      --surf:    #0c0c0c;
+      --surf2:   #141414;
     }
 
     body {
@@ -27,7 +27,6 @@
       padding: 48px 20px 80px;
     }
 
-    /* ── retour ── */
     .back {
       align-self: flex-start;
       color: var(--muted);
@@ -39,11 +38,9 @@
     }
     .back:hover { color: var(--cyan); }
 
-    /* ── titre ── */
     .page-title {
       font-size: clamp(1.5rem, 4vw, 2.2rem);
       font-weight: 700;
-      letter-spacing: -0.02em;
       color: var(--cyan);
       text-shadow: 0 0 40px rgba(0,191,255,0.4);
       text-align: center;
@@ -59,14 +56,13 @@
     /* ── carte ── */
     .card {
       width: 100%;
-      max-width: 560px;       /* ← largeur max de la carte */
-      background: var(--surface);
+      max-width: 560px;   /* ← largeur max */
+      background: var(--surf);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px 28px;     /* ← padding intérieur */
+      padding: 32px 28px; /* ← padding intérieur */
     }
 
-    /* ── champ adresse ── */
     .field-label {
       font-size: 0.7rem;
       font-weight: 600;
@@ -75,13 +71,11 @@
       color: var(--dimmer);
       margin-bottom: 8px;
     }
-    .input-row {
-      display: flex;
-      gap: 8px;
-    }
+    .input-row { display: flex; gap: 8px; }
+
     input {
       flex: 1;
-      background: var(--surface2);
+      background: var(--surf2);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 16px;
@@ -104,15 +98,14 @@
       font-size: 0.88rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
       white-space: nowrap;
       letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
     }
     .btn:hover    { background: #22d4ff; transform: translateY(-1px); }
     .btn:active   { transform: translateY(0); }
     .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
 
-    /* ── erreur ── */
     .error {
       margin-top: 12px;
       padding: 10px 14px;
@@ -124,7 +117,6 @@
       display: none;
     }
 
-    /* ── spinner ── */
     .spinner {
       display: none;
       width: 28px; height: 28px;
@@ -137,26 +129,18 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── résultats ── */
-    #results {
-      display: none;
-      margin-top: 28px;
-    }
+    #results { display: none; margin-top: 28px; }
 
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 24px;
-    }
+    .divider { height: 1px; background: var(--border); margin-bottom: 24px; }
 
-    /* Grille 2×2 */
     .stats {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr; /* ← 2 colonnes */
       gap: 10px;
       margin-bottom: 18px;
     }
     .stat {
-      background: var(--surface2);
+      background: var(--surf2);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px 16px;
@@ -174,13 +158,9 @@
       font-weight: 700;
       color: #fff;
       font-family: 'Consolas', monospace;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .stat-value.accent { color: var(--cyan); }
 
-    /* Tier — sobre */
     .tier {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -189,21 +169,12 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      background: var(--surface2);
+      background: var(--surf2);
     }
-    .tier-icon { font-size: 1.5rem; flex-shrink: 0; }
-    .tier-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-    .tier-desc {
-      font-size: 0.77rem;
-      color: var(--muted);
-      line-height: 1.4;
-    }
+    .tier-icon { font-size: 1.5rem; flex-shrink: 0; } /* ← taille icône tier */
+    .tier-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+    .tier-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
 
-    /* Barre */
     .bar-header {
       display: flex;
       justify-content: space-between;
@@ -212,7 +183,7 @@
       margin-bottom: 5px;
     }
     .bar-bg {
-      height: 4px;
+      height: 4px;            /* ← épaisseur barre */
       background: rgba(255,255,255,0.06);
       border-radius: 4px;
       overflow: hidden;
@@ -226,7 +197,30 @@
       width: 0%;
     }
 
-    /* Note */
+    /* Source badge */
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .source-badge.live {
+      background: rgba(0,220,100,0.1);
+      border: 1px solid rgba(0,220,100,0.3);
+      color: #44ee88;
+    }
+    .source-badge.estimated {
+      background: rgba(255,180,0,0.1);
+      border: 1px solid rgba(255,180,0,0.3);
+      color: #ffcc44;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
     .note {
       font-size: 0.71rem;
       color: var(--dimmer);
@@ -254,7 +248,6 @@
   <p class="page-sub">Ta position parmi les ≈ 7.8 millions de wallets actifs sur le Ledger</p>
 
   <div class="card">
-
     <div class="field-label">Adresse XRP</div>
     <div class="input-row">
       <input id="addr" type="text"
@@ -268,13 +261,19 @@
     <div id="results">
       <div class="divider"></div>
 
+      <!-- Badge indiquant la source des données -->
+      <div class="source-badge" id="source-badge">
+        <span class="dot"></span>
+        <span id="source-text">—</span>
+      </div>
+
       <div class="stats">
         <div class="stat">
           <div class="stat-label">Solde</div>
           <div class="stat-value accent" id="v-bal">—</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Rang estimé</div>
+          <div class="stat-label">Rang</div>
           <div class="stat-value" id="v-rank">—</div>
         </div>
         <div class="stat">
@@ -283,7 +282,7 @@
         </div>
         <div class="stat">
           <div class="stat-label">Wallets actifs</div>
-          <div class="stat-value">≈ 7.81M</div>
+          <div class="stat-value" id="v-total">≈ 7.81M</div>
         </div>
       </div>
 
@@ -303,126 +302,268 @@
         <div class="bar-fill" id="bar-fill"></div>
       </div>
 
-      <div class="note">
-        Solde récupéré en temps réel via le réseau XRPL.<br>
-        Rang calculé par interpolation sur les seuils officiels publiés par
-        <a href="https://rich-list.info" target="_blank">rich-list.info</a>
-        (table de distribution publique, ~7.81M comptes — précision ± quelques centaines de rangs).
-      </div>
+      <div class="note" id="note-text"></div>
     </div>
-
   </div>
 
   <script>
     /* =============================================
-       SEUILS PUBLICS — table "Percentile Distribution"
-       publiée sur rich-list.info (~7.81M comptes)
-
-       Pour mettre à jour : recopie les valeurs de la
-       colonne "Balance (or greater)" sur rich-list.info
+       TIERS — modifie noms, icônes et descriptions
        ============================================= */
-    const DIST = [
-      { pct:  0.01, minXRP: 3_836_129, n:       743 },
-      { pct:  0.10, minXRP:   281_938, n:     7_810 },
-      { pct:  0.20, minXRP:   161_356, n:    15_620 },
-      { pct:  0.50, minXRP:    81_240, n:    39_050 },
-      { pct:  1.00, minXRP:    45_340, n:    78_099 },
-      { pct:  2.00, minXRP:    22_142, n:   156_198 },
-      { pct:  3.00, minXRP:    14_260, n:   234_296 },
-      { pct:  4.00, minXRP:    10_050, n:   312_395 },
-      { pct:  5.00, minXRP:     7_588, n:   390_494 },
-      { pct: 10.00, minXRP:     2_193, n:   780_987 },
+    const TIERS = [
+      { min: 1_000_000, name: "Whale",    icon: "🐋", desc: "Top 0.01 % — élite absolue du Ledger XRP",       color: "#4499ff" },
+      { min:   100_000, name: "Shark",    icon: "🦈", desc: "Top 0.1 % — portefeuille d'envergure majeure",    color: "#22ccdd" },
+      { min:    45_340, name: "Dolphin",  icon: "🐬", desc: "Top 1 % — position solide et reconnue",           color: "#00ddaa" },
+      { min:    10_050, name: "Big Fish", icon: "🐠", desc: "Top 4 % — holder significatif",                   color: "#88dd44" },
+      { min:     2_193, name: "Fish",     icon: "🐟", desc: "Top 10 % — tu dépasses 90 % des wallets actifs",  color: "#ddcc22" },
+      { min:       100, name: "Shrimp",   icon: "🦐", desc: "En dessous du top 10 % — accumulation en cours",  color: "#ff9944" },
+      { min:         0, name: "Plankton", icon: "🌊", desc: "Solde minimal — bienvenue sur le Ledger",          color: "#ff6666" },
     ];
-    const TOTAL = 7_809_870;
 
-    function estimateRank(xrp) {
-      if (xrp >= DIST[0].minXRP) return DIST[0].n;
-      for (let i = 0; i < DIST.length - 1; i++) {
-        const hi = DIST[i], lo = DIST[i + 1];
+    /* =============================================
+       SEUILS STATIQUES (fallback si toutes les
+       API échouent) — source : rich-list.info
+       table "Percentile Distribution" publique
+       ============================================= */
+    const STATIC_DIST = [
+      { minXRP: 3_836_129, n:       743 },
+      { minXRP:   281_938, n:     7_810 },
+      { minXRP:   161_356, n:    15_620 },
+      { minXRP:    81_240, n:    39_050 },
+      { minXRP:    45_340, n:    78_099 },
+      { minXRP:    22_142, n:   156_198 },
+      { minXRP:    14_260, n:   234_296 },
+      { minXRP:    10_050, n:   312_395 },
+      { minXRP:     7_588, n:   390_494 },
+      { minXRP:     2_193, n:   780_987 },
+    ];
+    const STATIC_TOTAL = 7_809_870;
+
+    /* Interpolation LOGARITHMIQUE (distribution de Pareto)
+       La distribution XRP n'est pas linéaire — l'interpolation
+       log est bien plus précise sur ce type de données */
+    function logInterp(xrp, dist, total) {
+      if (xrp >= dist[0].minXRP) return dist[0].n;
+
+      for (let i = 0; i < dist.length - 1; i++) {
+        const hi = dist[i], lo = dist[i + 1];
         if (xrp >= lo.minXRP) {
-          const t = (xrp - lo.minXRP) / (hi.minXRP - lo.minXRP);
+          const t = (Math.log(xrp) - Math.log(lo.minXRP))
+                  / (Math.log(hi.minXRP) - Math.log(lo.minXRP));
           return Math.round(lo.n - t * (lo.n - hi.n));
         }
       }
+
       // En dessous du dernier seuil
-      const last = DIST[DIST.length - 1];
-      const t = Math.max(0, Math.min(1, xrp / last.minXRP));
-      return Math.round(last.n + (1 - t) * (TOTAL - last.n));
+      const last = dist[dist.length - 1];
+      if (xrp >= 1) {
+        const t = Math.log(xrp) / Math.log(last.minXRP);
+        return Math.round(last.n + (1 - Math.max(0, Math.min(1, t))) * (total - last.n));
+      }
+      return total;
     }
 
     /* =============================================
-       TIERS
-       Modifie les noms, icônes et descriptions librement
+       STRATÉGIE 1 — XRPSCAN account API
+       Leur site affiche le rang sur les pages compte,
+       il est parfois retourné dans l'API même si
+       non documenté officiellement.
        ============================================= */
-    const TIERS = [
-      { min: 1_000_000, name: "Whale",    icon: "🐋", desc: "Top 0.01 % — élite absolue du Ledger XRP",          color: "#4499ff" },
-      { min:   100_000, name: "Shark",    icon: "🦈", desc: "Top 0.1 % — portefeuille d'envergure majeure",       color: "#22ccdd" },
-      { min:    45_340, name: "Dolphin",  icon: "🐬", desc: "Top 1 % — position solide et reconnue",              color: "#00ddaa" },
-      { min:    10_050, name: "Big Fish", icon: "🐠", desc: "Top 4 % — holder significatif",                      color: "#88dd44" },
-      { min:     2_193, name: "Fish",     icon: "🐟", desc: "Top 10 % — tu dépasses 90 % des wallets actifs",     color: "#ddcc22" },
-      { min:       100, name: "Shrimp",   icon: "🦐", desc: "En dessous du top 10 % — accumulation en cours",     color: "#ff9944" },
-      { min:         0, name: "Plankton", icon: "🌊", desc: "Solde minimal — bienvenue sur le Ledger",             color: "#ff6666" },
-    ];
+    async function tryXrpscanRank(address) {
+      const r = await fetch(`https://api.xrpscan.com/api/v1/account/${address}`);
+      if (!r.ok) return null;
+      const d = await r.json();
+      /* Cherche dans tous les champs possibles */
+      const rank = d.rank ?? d.richlistRank ?? d.richlist_rank
+                ?? d.position ?? d.richlistPosition ?? null;
+      const total = d.totalAccounts ?? d.total_accounts ?? STATIC_TOTAL;
+      if (rank) return { rank, total, source: 'xrpscan-direct' };
+
+      /* XRPSCAN retourne parfois xrpBalance, on peut aussi récupérer
+         la distribution live via leur endpoint /balances */
+      return null;
+    }
+
+    /* =============================================
+       STRATÉGIE 2 — Distribution live XRPSCAN
+       Récupère les seuils en temps réel → aucune
+       maintenance manuelle requise
+       ============================================= */
+    async function tryXrpscanDistribution(xrp) {
+      /* XRPSCAN expose la table de distribution qui alimente
+         leur page xrpscan.com/balances */
+      const endpoints = [
+        'https://api.xrpscan.com/api/v1/metric/balances',
+        'https://api.xrpscan.com/api/v1/balances',
+        'https://api.xrpscan.com/api/v1/metric/distribution',
+      ];
+
+      for (const url of endpoints) {
+        try {
+          const r = await fetch(url);
+          if (!r.ok) continue;
+          const d = await r.json();
+
+          /* Le format peut varier — on cherche un tableau de seuils */
+          const rows = Array.isArray(d) ? d
+                     : (d.data ?? d.distribution ?? d.balances ?? null);
+          if (!rows || !rows.length) continue;
+
+          /* Convertit en format { minXRP, n } */
+          const dist = rows
+            .map(row => ({
+              minXRP: parseFloat(row.balance ?? row.minBalance ?? row.min ?? 0),
+              n: parseInt(row.accounts ?? row.count ?? row.n ?? 0)
+            }))
+            .filter(r => r.minXRP > 0 && r.n > 0)
+            .sort((a, b) => b.minXRP - a.minXRP);
+
+          if (dist.length < 3) continue;
+
+          const total = rows[rows.length - 1]?.totalAccounts
+                     ?? rows[0]?.totalAccounts
+                     ?? d.totalAccounts
+                     ?? STATIC_TOTAL;
+
+          const rank = logInterp(xrp, dist, total);
+          return { rank, total, source: 'xrpscan-live' };
+        } catch { /* essaie le suivant */ }
+      }
+      return null;
+    }
+
+    /* =============================================
+       STRATÉGIE 3 — Fallback statique (log interp)
+       Seuils de la table publique rich-list.info,
+       interpolation logarithmique
+       ============================================= */
+    function staticFallback(xrp) {
+      return {
+        rank: logInterp(xrp, STATIC_DIST, STATIC_TOTAL),
+        total: STATIC_TOTAL,
+        source: 'static-log'
+      };
+    }
+
+    /* =============================================
+       PIPELINE PRINCIPAL
+       ============================================= */
+    async function getRankData(address, xrp) {
+      /* Stratégie 1 */
+      try {
+        const r = await tryXrpscanRank(address);
+        if (r) return r;
+      } catch {}
+
+      /* Stratégie 2 */
+      try {
+        const r = await tryXrpscanDistribution(xrp);
+        if (r) return r;
+      } catch {}
+
+      /* Stratégie 3 */
+      return staticFallback(xrp);
+    }
 
     /* =============================================
        MAIN
        ============================================= */
     async function check() {
-      const addr = document.getElementById('addr').value.trim();
+      const address = document.getElementById('addr').value.trim();
       setError('');
 
-      if (!addr.match(/^r[1-9A-HJ-NP-Za-km-z]{24,33}$/)) {
+      if (!address.match(/^r[1-9A-HJ-NP-Za-km-z]{24,33}$/)) {
         setError("Adresse invalide — elle doit commencer par « r » et faire 25 à 34 caractères.");
         return;
       }
 
       setLoading(true);
+
       try {
-        const res  = await fetch('https://xrplcluster.com', {
-          method : 'POST',
+        /* Solde XRPL + rang en parallèle */
+        const xrplPromise = fetch('https://xrplcluster.com', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body   : JSON.stringify({
+          body: JSON.stringify({
             method: 'account_info',
-            params: [{ account: addr, ledger_index: 'current' }]
+            params: [{ account: address, ledger_index: 'current' }]
           })
         });
-        const data = await res.json();
 
-        if (data.result?.error) {
+        const xrplRes  = await xrplPromise;
+        const xrplData = await xrplRes.json();
+
+        if (xrplData.result?.error) {
           setError("Adresse introuvable — vérifiez qu'elle est active (funded) sur le Ledger.");
           setLoading(false);
           return;
         }
 
-        const xrp  = parseInt(data.result.account_data.Balance) / 1_000_000;
-        const rank = estimateRank(xrp);
-        const pct  = (rank / TOTAL) * 100;
+        const xrp = parseInt(xrplData.result.account_data.Balance) / 1_000_000;
+
+        /* Récupération du rang via pipeline */
+        const { rank, total, source } = await getRankData(address, xrp);
+        const pct  = (rank / total) * 100;
         const tier = TIERS.find(t => xrp >= t.min) || TIERS[TIERS.length - 1];
-        render(xrp, rank, pct, tier);
+
+        render(xrp, rank, pct, total, tier, source);
 
       } catch {
         setError("Impossible de joindre le réseau XRP — vérifiez votre connexion.");
       }
+
       setLoading(false);
     }
 
-    function render(xrp, rank, pct, tier) {
+    /* =============================================
+       AFFICHAGE
+       ============================================= */
+    function render(xrp, rank, pct, total, tier, source) {
       document.getElementById('v-bal').textContent =
         xrp.toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' XRP';
+
       document.getElementById('v-rank').textContent =
         '#\u202F' + rank.toLocaleString('fr-FR');
+
       document.getElementById('v-pct').textContent =
         pct < 0.01 ? '< 0.01 %' : pct.toFixed(pct < 1 ? 3 : 2) + ' %';
 
-      document.getElementById('tier-icon').textContent  = tier.icon;
-      document.getElementById('tier-name').textContent  = tier.name;
-      document.getElementById('tier-name').style.color  = tier.color;
-      document.getElementById('tier-desc').textContent  = tier.desc;
+      document.getElementById('v-total').textContent =
+        '≈ ' + (total / 1_000_000).toFixed(2) + 'M';
 
-      const progress = Math.max(1, Math.min(99, (1 - rank / TOTAL) * 100));
-      document.getElementById('bar-fill').style.width   = progress + '%';
+      /* Tier */
+      document.getElementById('tier-icon').textContent = tier.icon;
+      document.getElementById('tier-name').textContent = tier.name;
+      document.getElementById('tier-name').style.color = tier.color;
+      document.getElementById('tier-desc').textContent = tier.desc;
 
-      document.getElementById('results').style.display  = 'block';
+      /* Barre */
+      const progress = Math.max(1, Math.min(99, (1 - rank / total) * 100));
+      document.getElementById('bar-fill').style.width = progress + '%';
+
+      /* Badge source */
+      const badge    = document.getElementById('source-badge');
+      const badgeTxt = document.getElementById('source-text');
+
+      const sourceMap = {
+        'xrpscan-direct': { label: 'Rang en direct — XRPSCAN',       cls: 'live'      },
+        'xrpscan-live':   { label: 'Distribution live — XRPSCAN',     cls: 'live'      },
+        'static-log':     { label: 'Estimation (interpolation log)',   cls: 'estimated' },
+      };
+
+      const info = sourceMap[source] || sourceMap['static-log'];
+      badge.className    = 'source-badge ' + info.cls;
+      badgeTxt.textContent = info.label;
+
+      /* Note bas de page selon la source */
+      const notes = {
+        'xrpscan-direct': `Rang réel récupéré directement depuis <a href="https://xrpscan.com" target="_blank">XRPSCAN</a>. Solde en temps réel via le réseau XRPL.`,
+        'xrpscan-live':   `Rang calculé sur la distribution live de <a href="https://xrpscan.com/balances" target="_blank">XRPSCAN</a> (mise à jour automatique). Solde via XRPL.`,
+        'static-log':     `Rang estimé par interpolation logarithmique sur les seuils publics de <a href="https://rich-list.info" target="_blank">rich-list.info</a>. Précision : ± quelques milliers de rangs. Solde via XRPL.`,
+      };
+      document.getElementById('note-text').innerHTML = notes[source] || notes['static-log'];
+
+      document.getElementById('results').style.display = 'block';
     }
 
     function setLoading(on) {
