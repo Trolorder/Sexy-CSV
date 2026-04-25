@@ -11,7 +11,6 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       background-color: #000;
       font-family: Arial, sans-serif;
@@ -23,7 +22,6 @@
       padding: 20px;
       gap: 0;
     }
-
     h1 {
       color: #00bfff;
       font-size: clamp(1.4rem, 4vw, 2.4rem);
@@ -32,7 +30,6 @@
       line-height: 1.4;
       margin-bottom: 30px;
     }
-
     .btn {
       background: #00bfff;
       color: #000;
@@ -48,23 +45,19 @@
       display: inline-block;
       margin-bottom: 0;
     }
-
     .btn:hover {
       background: #00e0ff;
       transform: scale(1.07);
     }
-
     .xrp-wrapper {
       width: 100%;
       max-width: 5000px;
-      margin-top: -10px; /* colle l'image sous le bouton */
+      margin-top: -10px;
     }
-
     .xrp-wrapper img {
       width: 100%;
       height: auto;
       display: block;
-      /* on crop le haut de l'image (le coin XRP) et on garde le X */
       object-fit: cover;
       object-position: center 60%;
       max-height: 55vh;
@@ -73,12 +66,27 @@
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
     }
 
+    /* ✅ NOUVEAU : zone sous l'image */
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 30px;
+      padding-bottom: 30px;
+    }
+    .bottom-section h2 {
+      color: #00bfff;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      text-shadow: 0 0 10px #00bfff;
+      text-align: center;
+    }
+
     @media (max-width: 480px) {
       .xrp-wrapper {
         max-width: 100%;
         margin-top: -5px;
       }
-
       .xrp-wrapper img {
         max-height: 45vh;
         object-position: center 55%;
@@ -87,18 +95,23 @@
   </style>
 </head>
 <body>
-
   <h1>1: Upload your .csv<br>2: Enjoy :)</h1>
-
   <a href="Git%20csv/Sexy_CSV.html">
     <button class="btn">Make MyFile.csv Sexy</button>
   </a>
-
   <div class="xrp-wrapper">
     <img
       src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp"
       alt="XRP logo"
     >
+  </div>
+
+  <!-- ✅ NOUVEAU BOUTON -->
+  <div class="bottom-section">
+    <h2>Where do you stand on the XRP Richlist?</h2>
+    <a href="richlist/index.html">
+      <button class="btn">🏆 Check My Ranking</button>
+    </a>
   </div>
 
 </body>
