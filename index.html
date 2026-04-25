@@ -15,17 +15,20 @@
       overflow: hidden;
       font-family: Arial, sans-serif;
     }
+
     .container {
       position: relative;
       max-width: 92%;
       width: 100%;
     }
+
     img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 12px;
     }
+
     h1 {
       position: absolute;
       top: 22%;
@@ -39,6 +42,7 @@
       z-index: 10;
       white-space: nowrap;
     }
+
     .btn {
       position: absolute;
       top: 30%;
@@ -56,22 +60,28 @@
       white-space: nowrap;
       z-index: 10;
     }
+
     .btn:hover {
       background: #00e0ff;
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* Compteur discret - presque invisible, mais visible avec Ctrl + A */
+    /* ==================== COMPTEUR POUR TESTS ==================== */
     .visit-counter {
       position: absolute;
-      bottom: 15px;
-      left: 20px;
-      color: #111111;           /* très foncé sur fond noir */
-      font-size: 13px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ff0000;           /* rouge pour bien voir pendant les tests */
+      font-size: 28px;
+      font-weight: bold;
       font-family: monospace;
-      z-index: 5;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.7);   /* fond semi-transparent pour mieux lire */
+      padding: 10px 20px;
+      border-radius: 8px;
       pointer-events: none;
-      user-select: text;        /* permet de sélectionner facilement */
+      user-select: text;
     }
   </style>
 </head>
@@ -84,20 +94,14 @@
       <button class="btn">Make your Kraken.csv file Sexy</button>
     </a>
 
-    <!-- Zone où Counter.dev affichera le compteur -->
+    <!-- Compteur visible au milieu pour tester -->
     <div class="visit-counter" id="counter-dev">
-      Visites : ...
+      Visites : 00000
     </div>
   </div>
 
-  <!-- ==================== COLLE ICI LE SCRIPT DE COUNTER.DEV ==================== -->
+  <!-- Script Counter.dev (il continue de compter les visites) -->
   <script src="https://cdn.counter.dev/script.js" data-id="9d93fce1-b2c0-467f-ab06-fb3e9277bad1" data-utcoffset="2"></script>
-  <!-- Exemple de ce que Counter.dev te donne (à remplacer par le tien) -->
-  <!-- <script src="https://counter.dev/script.js" data-site-id="TON_ID_ICI" data-replace="true"></script> -->
-
-  <script>
-    // Si Counter.dev ne remplace pas automatiquement le div, tu peux ajouter du code ici plus tard
-  </script>
 
 </body>
 </html>
