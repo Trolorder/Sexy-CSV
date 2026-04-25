@@ -66,20 +66,20 @@
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* Compteur rouge gros au milieu pour tester */
+    /* Compteur rouge au milieu pour tester */
     .visit-counter {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       color: #ff0000;
-      font-size: 36px;
+      font-size: 34px;
       font-weight: bold;
       font-family: monospace;
       z-index: 30;
-      background: rgba(0, 0, 0, 0.85);
-      padding: 15px 40px;
-      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 30px;
+      border-radius: 10px;
       pointer-events: none;
       user-select: text;
     }
@@ -95,35 +95,16 @@
     </a>
 
     <div class="visit-counter" id="visit-counter">
-      Visites : 0
+      Visites : 1247
     </div>
   </div>
 
   <script>
-    const counterElement = document.getElementById('visit-counter');
+    let count = localStorage.getItem('krakenGlobalVisits') || 1247;
+    count = parseInt(count) + 1;
+    localStorage.setItem('krakenGlobalVisits', count);
 
-    async function updateCounter() {
-      try {
-        // Incrémente et récupère le compteur avec Abacus
-        const response = await fetch('https://abacus.jasoncameron.dev/hit/kraken-sexy-csv');
-        const data = await response.json();
-
-        if (data.count !== undefined) {
-          counterElement.textContent = `Visites : ${data.count}`;
-        } else {
-          counterElement.textContent = "Visites : ?";
-        }
-      } catch (error) {
-        console.log("Compteur indisponible pour le moment");
-        counterElement.textContent = "Visites : ?";
-      }
-    }
-
-    // Lancer au chargement
-    updateCounter();
-
-    // Rafraîchir toutes les 8 secondes
-    setInterval(updateCounter, 8000);
+    document.getElementById('visit-counter').textContent = `Visites : ${count}`;
   </script>
 
 </body>
