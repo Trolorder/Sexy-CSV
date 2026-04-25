@@ -6,28 +6,20 @@
   <style>
     body {
       background-color: #000000;
-      color: #ffffff;
       margin: 0;
-      padding: 20px 0;           /* ← important pour laisser de l'espace en haut */
-      min-height: 100vh;
+      padding: 0;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      overflow-y: auto;          /* permet de scroller si besoin */
     }
 
     .container {
-      max-width: 720px;          /* largeur fixe plus facile à gérer */
-      text-align: center;
+      position: relative;
+      max-width: 85%;        /* ← change ici si tu veux l'image plus grande ou plus petite */
       width: 100%;
-    }
-
-    h1 {
-      color: #00bfff;
-      font-size: 2.1rem;
-      margin-bottom: 20px;       /* espace entre texte et image */
-      text-shadow: 0 0 12px #00bfff;
     }
 
     img {
@@ -37,32 +29,50 @@
       border-radius: 12px;
     }
 
+    h1 {
+      position: absolute;
+      top: 8%;               /* ← ajuste ici pour monter/descendre le texte */
+      left: 50%;
+      transform: translateX(-50%);
+      color: #00bfff;
+      font-size: 2.4rem;
+      text-shadow: 0 0 15px #00bfff;
+      margin: 0;
+      text-align: center;
+      z-index: 10;
+      white-space: nowrap;
+    }
+
     .btn {
+      position: absolute;
+      top: 68%;              /* ← ajuste ici pour monter/descendre le bouton sur l'image */
+      left: 50%;
+      transform: translateX(-50%);
       background: #00bfff;
       color: #000;
       border: none;
-      padding: 16px 45px;
-      font-size: 23px;
+      padding: 16px 50px;
+      font-size: 24px;
       font-weight: bold;
       border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 0 30px #00bfff;
-      margin-top: -45px;         /* ← ajuste ici pour le bouton */
-      display: inline-block;
+      white-space: nowrap;
+      z-index: 10;
     }
 
     .btn:hover {
       background: #00e0ff;
-      transform: scale(1.05);
+      transform: translateX(-50%) scale(1.05);
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>1: Upload your .csv <br>2: Enjoy :)</h1>
-    
     <img src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp" alt="XRP">
+
+    <h1>1: Upload your .csv <br>2: Enjoy :)</h1>
 
     <a href="Git%20csv/Sexy_CSV.html">
       <button class="btn">Make your Kraken.csv file Sexy</button>
