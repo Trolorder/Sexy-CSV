@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Make your Kraken.csv file Sexy</title>
   
-  <!-- Script Counter.dev dans le <head> -->
+  <!-- Script Counter.dev (il continue de compter les visites mondiales) -->
   <script src="https://cdn.counter.dev/script.js" data-id="9d93fce1-b2c0-467f-ab06-fb3e9277bad1" data-utcoffset="1"></script>
 
   <style>
@@ -70,20 +70,20 @@
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* ==================== COMPTEUR POUR TESTS ==================== */
+    /* Compteur rouge gros au milieu pour tests */
     .visit-counter {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #ff0000;                    /* Rouge bien visible */
-      font-size: 38px;
+      color: #ff0000;
+      font-size: 42px;
       font-weight: bold;
       font-family: monospace;
       z-index: 30;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 15px 40px;
-      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px 50px;
+      border-radius: 15px;
       pointer-events: none;
       user-select: text;
     }
@@ -98,11 +98,20 @@
       <button class="btn">Make your Kraken.csv file Sexy</button>
     </a>
 
-    <!-- Compteur rouge au milieu pour tester -->
+    <!-- Compteur rouge visible pour tests -->
     <div class="visit-counter" id="visit-counter">
       Visites : 00000
     </div>
   </div>
+
+  <script>
+    // Compteur local pour tester facilement (augmente à chaque F5)
+    let count = parseInt(localStorage.getItem('testVisits')) || 0;
+    count += 1;
+    localStorage.setItem('testVisits', count);
+
+    document.getElementById('visit-counter').textContent = `Visites : ${count}`;
+  </script>
 
 </body>
 </html>
