@@ -15,17 +15,20 @@
       overflow: hidden;
       font-family: Arial, sans-serif;
     }
+
     .container {
       position: relative;
-      max-width: 92%;
+      max-width: 92%;           /* un peu plus grand que 100% pour éviter les bords */
       width: 100%;
     }
+
     img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 12px;
     }
+
     h1 {
       position: absolute;
       top: 22%;
@@ -39,6 +42,7 @@
       z-index: 10;
       white-space: nowrap;
     }
+
     .btn {
       position: absolute;
       top: 30%;
@@ -56,19 +60,21 @@
       white-space: nowrap;
       z-index: 10;
     }
+
     .btn:hover {
       background: #00e0ff;
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* Compteur discret */
-    .visit-counter {
+    /* Compteur de visites - presque invisible */
+    .counter {
       position: absolute;
-      bottom: 12px;
+      bottom: 10px;
       left: 15px;
-      color: #0a0a0a;        /* presque invisible sur fond noir */
-      font-size: 11px;
-      z-index: 5;
+      color: #000000;           /* noir sur noir = invisible */
+      font-size: 12px;
+      z-index: 1;
+      user-select: all;         /* facilite la sélection avec Ctrl+A */
       pointer-events: none;
     }
   </style>
@@ -82,13 +88,18 @@
       <button class="btn">Make your Kraken.csv file Sexy</button>
     </a>
 
-    <!-- Compteur discret (sera remplacé par Counter.dev) -->
-    <div class="visit-counter" id="counter">Visites : ...</div>
+    <!-- Compteur de visites -->
+    <div class="counter" id="visit-counter">Visites : 00000</div>
   </div>
 
-  <!-- Ici tu colleras le script de Counter.dev -->
   <script>
-    // Ton script Counter.dev ira ici
+    // Compteur simple (stocké dans le navigateur de l'utilisateur)
+    let visits = localStorage.getItem('pageVisits') || 0;
+    visits = parseInt(visits) + 1;
+    localStorage.setItem('pageVisits', visits);
+
+    // Affichage du compteur
+    document.getElementById('visit-counter').textContent = `Visites : ${visits.toString().padStart(5, '0')}`;
   </script>
 
 </body>
