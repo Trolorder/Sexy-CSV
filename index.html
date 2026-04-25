@@ -66,7 +66,7 @@
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* Compteur rouge au milieu pour tester */
+    /* Compteur rouge au milieu (pour tests) */
     .visit-counter {
       position: absolute;
       top: 50%;
@@ -77,8 +77,8 @@
       font-weight: bold;
       font-family: monospace;
       z-index: 30;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 12px 30px;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 12px 35px;
       border-radius: 10px;
       pointer-events: none;
       user-select: text;
@@ -95,14 +95,15 @@
     </a>
 
     <div class="visit-counter" id="visit-counter">
-      Visites : 1247
+      Visites : 0
     </div>
   </div>
 
   <script>
-    let count = localStorage.getItem('krakenGlobalVisits') || 1247;
-    count = parseInt(count) + 1;
-    localStorage.setItem('krakenGlobalVisits', count);
+    // Compteur qui commence à 0 ou à la dernière valeur sauvegardée
+    let count = parseInt(localStorage.getItem('krakenVisits')) || 0;
+    count += 1;                    // +1 à chaque chargement
+    localStorage.setItem('krakenVisits', count);
 
     document.getElementById('visit-counter').textContent = `Visites : ${count}`;
   </script>
