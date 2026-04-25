@@ -9,7 +9,7 @@
       color: #ffffff;
       margin: 0;
       padding: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -19,14 +19,14 @@
 
     .container {
       position: relative;
-      max-width: 75%;        /* réduit un peu pour laisser de la place */
+      max-width: 78%;
       text-align: center;
     }
 
     h1 {
       color: #00bfff;
-      font-size: 2.4rem;
-      margin-bottom: 25px;   /* espace sous le texte */
+      font-size: 2.2rem;
+      margin: 0 0 15px 0;        /* réduit l'espace sous le texte */
       text-shadow: 0 0 12px #00bfff;
     }
 
@@ -35,27 +35,28 @@
       height: auto;
       display: block;
       border-radius: 12px;
+      margin: 0 auto;
     }
 
     .btn {
       background: #00bfff;
       color: #000;
       border: none;
-      padding: 18px 50px;
-      font-size: 24px;
+      padding: 16px 45px;
+      font-size: 23px;
       font-weight: bold;
-      border-radius: 12px;
+      border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 0 30px #00bfff;
       white-space: nowrap;
       transition: all 0.3s;
-      margin-top: -45px;     /* ← C’est cette valeur qui fait remonter le bouton */
+      margin-top: -55px;          /* ← remonte le bouton juste au-dessus de l'image */
       display: inline-block;
     }
 
     .btn:hover {
       background: #00e0ff;
-      transform: scale(1.06);
+      transform: scale(1.05);
     }
   </style>
 </head>
