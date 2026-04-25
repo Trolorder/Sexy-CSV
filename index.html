@@ -86,9 +86,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;              /* ← espace entre le sous-titre et le bouton */
-      margin-top: -75px;       /* ← espace ENTRE l'image et cette section (augmente = descend) */
-      padding-bottom: 30px;   /* ← espace en bas de la page */
+      gap: 12px;
+      margin-top: -75px;
+      padding-bottom: 30px;
+      position: relative;   /* ← AJOUTE ÇA */
+      z-index: 10;          /* ← ET ÇA — passe le bouton au-dessus de l'image */
     }
 
     /* Sous-titre de la section richlist */
