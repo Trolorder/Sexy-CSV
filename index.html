@@ -66,20 +66,15 @@
       transform: translateX(-50%) scale(1.05);
     }
 
-    /* Compteur rouge au milieu pour tester */
+    /* Compteur discret en bas à gauche - presque invisible */
     .visit-counter {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #ff0000;
-      font-size: 34px;
-      font-weight: bold;
+      bottom: 15px;
+      left: 20px;
+      color: #1a1a1a;           /* très noir = presque invisible */
+      font-size: 12px;
       font-family: monospace;
-      z-index: 30;
-      background: rgba(0, 0, 0, 0.85);
-      padding: 12px 35px;
-      border-radius: 10px;
+      z-index: 5;
       pointer-events: none;
       user-select: text;
     }
@@ -100,14 +95,11 @@
   </div>
 
   <script>
-    // Compteur qui fonctionne correctement
     let count = parseInt(localStorage.getItem('krakenVisits')) || 0;
-    count = count + 1;                    // +1 à chaque chargement
+    count += 1;
+    localStorage.setItem('krakenVisits', count);
 
     document.getElementById('visit-counter').textContent = `Visites : ${count}`;
-
-    // Sauvegarde la nouvelle valeur
-    localStorage.setItem('krakenVisits', count);
   </script>
 
 </body>
