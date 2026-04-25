@@ -19,14 +19,14 @@
 
     .container {
       position: relative;
-      max-width: 80%;
+      max-width: 75%;        /* réduit un peu pour laisser de la place */
       text-align: center;
     }
 
     h1 {
       color: #00bfff;
       font-size: 2.4rem;
-      margin-bottom: 30px;
+      margin-bottom: 25px;   /* espace sous le texte */
       text-shadow: 0 0 12px #00bfff;
     }
 
@@ -37,27 +37,25 @@
       border-radius: 12px;
     }
 
-    .btn-container {
-      margin-top: -20px;           /* ← Ceci permet de faire remonter le bouton */
-    }
-
     .btn {
       background: #00bfff;
       color: #000;
       border: none;
-      padding: 16px 45px;
+      padding: 18px 50px;
       font-size: 24px;
       font-weight: bold;
       border-radius: 12px;
       cursor: pointer;
-      box-shadow: 0 0 25px #00bfff;
+      box-shadow: 0 0 30px #00bfff;
       white-space: nowrap;
       transition: all 0.3s;
+      margin-top: -45px;     /* ← C’est cette valeur qui fait remonter le bouton */
+      display: inline-block;
     }
 
     .btn:hover {
       background: #00e0ff;
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
   </style>
 </head>
@@ -68,11 +66,9 @@
     
     <img src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp" alt="XRP">
 
-    <div class="btn-container">
-      <a href="Git%20csv/Sexy_CSV.html">
-        <button class="btn">Make your Kraken.csv file Sexy</button>
-      </a>
-    </div>
+    <a href="Git%20csv/Sexy_CSV.html">
+      <button class="btn">Make your Kraken.csv file Sexy</button>
+    </a>
   </div>
 
 </body>
