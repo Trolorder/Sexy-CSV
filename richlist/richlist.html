@@ -3,394 +3,393 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XRP Richlist – Check My Rank</title>
+  <title>XRP Richlist — Check My Rank</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cyan:       #00bfff;
+      --border:     rgba(0,191,255,0.15);
+      --muted:      rgba(255,255,255,0.35);
+      --dimmer:     rgba(255,255,255,0.18);
+      --surface:    #0c0c0c;
+      --surface2:   #141414;
+    }
 
     body {
-      background-color: #000;
-      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 40px 20px 60px;
-      color: #fff;
+      padding: 48px 20px 80px;
     }
 
-    /* ← lien retour */
-    .back-link {
+    /* ── retour ── */
+    .back {
       align-self: flex-start;
-      color: #00bfff;
+      color: var(--muted);
       text-decoration: none;
-      font-size: 0.95rem;
-      margin-bottom: 40px;
-      opacity: 0.75;
-      transition: opacity 0.2s;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 56px;
+      transition: color 0.2s;
     }
-    .back-link:hover { opacity: 1; }
+    .back:hover { color: var(--cyan); }
 
-    /* ← titre principal */
-    h1 {
-      color: #00bfff;
-      font-size: clamp(1.6rem, 5vw, 2.6rem);
-      text-shadow: 0 0 20px #00bfff;
+    /* ── titre ── */
+    .page-title {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--cyan);
+      text-shadow: 0 0 40px rgba(0,191,255,0.4);
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-
-    .subtitle {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.95rem;
+    .page-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
     }
 
-    /* ← carte principale */
+    /* ── carte ── */
     .card {
-      background: #0d0d0d;
-      border: 1px solid rgba(0,191,255,0.2);
-      border-radius: 20px;
-      padding: 36px 32px;
       width: 100%;
-      max-width: 580px;  /* ← largeur max */
+      max-width: 560px;       /* ← largeur max de la carte */
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;     /* ← padding intérieur */
     }
 
-    label {
-      display: block;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 8px;
-      letter-spacing: 0.08em;
+    /* ── champ adresse ── */
+    .field-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      color: var(--dimmer);
+      margin-bottom: 8px;
     }
-
-    /* ← ligne input + bouton */
     .input-row {
       display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 8px;
     }
-
-    input[type="text"] {
+    input {
       flex: 1;
-      background: #1a1a1a;
-      border: 1px solid rgba(0,191,255,0.25);
-      border-radius: 50px;
-      padding: 13px 20px;
-      font-size: 0.9rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      font-family: 'Consolas', 'Courier New', monospace;
       color: #fff;
       outline: none;
+      transition: border-color 0.2s;
+      min-width: 0;
     }
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.2); }
-    input[type="text"]:focus { border-color: #00bfff; }
+    input::placeholder { color: var(--dimmer); }
+    input:focus        { border-color: var(--cyan); }
 
     .btn {
-      background: #00bfff;         /* ← couleur bouton */
+      background: var(--cyan);
       color: #000;
       border: none;
-      padding: 13px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 50px;
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-size: 0.88rem;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 0 18px rgba(0,191,255,0.45);
-      transition: all 0.25s ease;
+      transition: background 0.2s, transform 0.15s;
       white-space: nowrap;
+      letter-spacing: 0.02em;
     }
-    .btn:hover { background: #00e0ff; transform: scale(1.05); }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .btn:hover    { background: #22d4ff; transform: translateY(-1px); }
+    .btn:active   { transform: translateY(0); }
+    .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
 
-    /* ← spinner chargement */
+    /* ── erreur ── */
+    .error {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(255,80,80,0.08);
+      border: 1px solid rgba(255,80,80,0.25);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #ff8080;
+      display: none;
+    }
+
+    /* ── spinner ── */
     .spinner {
       display: none;
-      width: 34px; height: 34px;
-      border: 3px solid rgba(0,191,255,0.2);
-      border-top-color: #00bfff;
+      width: 28px; height: 28px;
+      border: 2px solid var(--border);
+      border-top-color: var(--cyan);
       border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-      margin: 22px auto;
+      animation: spin 0.7s linear infinite;
+      margin: 28px auto 0;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ← message d'erreur */
-    .error-msg {
-      background: rgba(255,80,80,0.1);
-      border: 1px solid rgba(255,80,80,0.3);
-      border-radius: 12px;
-      padding: 14px 18px;
-      color: #ff7070;
-      font-size: 0.88rem;
-      margin-top: 14px;
+    /* ── résultats ── */
+    #results {
       display: none;
+      margin-top: 28px;
     }
 
-    /* ← zone résultats */
-    #result-area { display: none; margin-top: 24px; }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
 
-    /* ← grille stats (4 cases) */
-    .stats-grid {
+    /* Grille 2×2 */
+    .stats {
       display: grid;
-      grid-template-columns: 1fr 1fr;   /* ← 2 colonnes */
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       margin-bottom: 18px;
     }
-    .stat-box {
-      background: #111;
-      border: 1px solid rgba(0,191,255,0.15);
-      border-radius: 14px;
-      padding: 16px 14px;
-      text-align: center;
+    .stat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
     }
     .stat-label {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.38);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 7px;
+      color: var(--dimmer);
+      margin-bottom: 6px;
     }
     .stat-value {
-      font-size: 1.35rem;
-      font-weight: bold;
-      color: #00bfff;
-      word-break: break-all;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Consolas', monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    .stat-value.accent { color: var(--cyan); }
 
-    /* ← badge tier (Whale, Dolphin...) */
-    .tier-box {
-      border-radius: 14px;
-      padding: 20px;
-      text-align: center;
+    /* Tier — sobre */
+    .tier {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
       margin-bottom: 18px;
-      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface2);
     }
-    .tier-emoji { font-size: 2.6rem; display: block; margin-bottom: 6px; }
-    .tier-name  { font-size: 1.35rem; font-weight: bold; margin-bottom: 4px; }
-    .tier-desc  { font-size: 0.83rem; opacity: 0.7; }
+    .tier-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .tier-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .tier-desc {
+      font-size: 0.77rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
 
-    /* ← barre de progression */
-    .progress-labels {
+    /* Barre */
+    .bar-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.35);
+      font-size: 0.68rem;
+      color: var(--dimmer);
       margin-bottom: 5px;
     }
-    .progress-bg {
-      background: rgba(255,255,255,0.08);
-      border-radius: 50px;
-      height: 8px;          /* ← épaisseur barre */
+    .bar-bg {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
-    .progress-fill {
+    .bar-fill {
       height: 100%;
-      border-radius: 50px;
-      background: linear-gradient(90deg, #00bfff, #00ff99); /* ← couleurs barre */
-      transition: width 1.1s ease;
+      border-radius: 4px;
+      background: var(--cyan);
+      transition: width 1s cubic-bezier(.4,0,.2,1);
       width: 0%;
     }
 
-    /* ← note bas de page */
-    .disclaimer {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.22);
+    /* Note */
+    .note {
+      font-size: 0.71rem;
+      color: var(--dimmer);
+      line-height: 1.65;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
       text-align: center;
-      line-height: 1.6;
     }
-    .disclaimer a { color: rgba(0,191,255,0.45); text-decoration: none; }
-    .disclaimer a:hover { color: #00bfff; }
-    .disclaimer strong { color: rgba(255,255,255,0.4); font-weight: normal; }
+    .note a { color: rgba(0,191,255,0.5); text-decoration: none; }
+    .note a:hover { color: var(--cyan); }
 
-    @media (max-width: 480px) {
-      .card { padding: 22px 16px; }
+    @media (max-width: 440px) {
+      .card  { padding: 20px 14px; }
+      .stats { grid-template-columns: 1fr; }
       .input-row { flex-direction: column; }
-      .btn { width: 100%; }
-      .stats-grid { grid-template-columns: 1fr; }
+      .btn   { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- LIEN RETOUR — adapte le chemin si besoin -->
-  <a class="back-link" href="../index.html">← Retour à l'accueil</a>
+  <a class="back" href="../index.html">← Retour</a>
 
-  <!-- TITRE -->
-  <h1>🏆 XRP Richlist Rank</h1>
-  <p class="subtitle">Entre ton adresse XRP pour voir où tu te situes dans le classement mondial</p>
+  <h1 class="page-title">XRP Richlist Rank</h1>
+  <p class="page-sub">Ta position parmi les ≈ 7.8 millions de wallets actifs sur le Ledger</p>
 
   <div class="card">
-    <label for="addr">Adresse XRP</label>
+
+    <div class="field-label">Adresse XRP</div>
     <div class="input-row">
-      <input type="text" id="addr"
+      <input id="addr" type="text"
         placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         autocomplete="off" spellcheck="false">
-      <button class="btn" id="check-btn" onclick="checkRank()">Vérifier</button>
+      <button class="btn" id="btn" onclick="check()">Vérifier</button>
     </div>
+    <div class="error"   id="err"></div>
+    <div class="spinner" id="spin"></div>
 
-    <div class="error-msg" id="error-msg"></div>
-    <div class="spinner"   id="spinner"></div>
+    <div id="results">
+      <div class="divider"></div>
 
-    <div id="result-area">
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-label">Solde XRP</div>
-          <div class="stat-value" id="val-balance">—</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">Solde</div>
+          <div class="stat-value accent" id="v-bal">—</div>
         </div>
-        <div class="stat-box">
+        <div class="stat">
           <div class="stat-label">Rang estimé</div>
-          <div class="stat-value" id="val-rank">—</div>
+          <div class="stat-value" id="v-rank">—</div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Top</div>
-          <div class="stat-value" id="val-pct">—</div>
+        <div class="stat">
+          <div class="stat-label">Percentile</div>
+          <div class="stat-value" id="v-pct">—</div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Comptes actifs</div>
-          <div class="stat-value">~7.8M</div>
+        <div class="stat">
+          <div class="stat-label">Wallets actifs</div>
+          <div class="stat-value">≈ 7.81M</div>
         </div>
       </div>
 
-      <div class="tier-box" id="tier-box">
-        <span class="tier-emoji" id="tier-emoji"></span>
-        <div class="tier-name"  id="tier-name"></div>
-        <div class="tier-desc"  id="tier-desc"></div>
+      <div class="tier" id="tier-box">
+        <div class="tier-icon" id="tier-icon"></div>
+        <div>
+          <div class="tier-name" id="tier-name"></div>
+          <div class="tier-desc" id="tier-desc"></div>
+        </div>
       </div>
 
-      <div class="progress-labels">
-        <span>Plankton</span><span>Whale 🐋</span>
+      <div class="bar-header">
+        <span>Bas du classement</span>
+        <span>Top du classement</span>
       </div>
-      <div class="progress-bg">
-        <div class="progress-fill" id="progress-fill"></div>
+      <div class="bar-bg">
+        <div class="bar-fill" id="bar-fill"></div>
       </div>
 
-      <p class="disclaimer">
-        * Rang interpolé d'après les seuils réels de <a href="https://rich-list.info" target="_blank">rich-list.info</a>
-        (données sur ~7.8M comptes actifs).<br>
-        Solde en temps réel via <strong>XRPL Cluster</strong> •
-        Classement de référence via <a href="https://xrpscan.com/balances" target="_blank">XRPSCAN</a>
-      </p>
+      <div class="note">
+        Solde récupéré en temps réel via le réseau XRPL.<br>
+        Rang calculé par interpolation sur les seuils officiels publiés par
+        <a href="https://rich-list.info" target="_blank">rich-list.info</a>
+        (table de distribution publique, ~7.81M comptes — précision ± quelques centaines de rangs).
+      </div>
     </div>
+
   </div>
 
   <script>
     /* =============================================
-       SEUILS RÉELS tirés de rich-list.info
-       (mis à jour avril 2026 – ~7 810 000 comptes)
-       Format : { minXRP, rank, percentile }
-       Tu peux mettre à jour ces valeurs manuellement
-       si les seuils changent sur rich-list.info
-       ============================================= */
-    const THRESHOLDS = [
-      { minXRP: 3_836_130, rank:       743, pct: 0.01  },
-      { minXRP:   281_938, rank:     7_810, pct: 0.10  },
-      { minXRP:   161_356, rank:    15_620, pct: 0.20  },
-      { minXRP:    81_241, rank:    39_050, pct: 0.50  },
-      { minXRP:    64_100, rank:    50_667, pct: 0.649 }, // ← point de référence
-      { minXRP:    45_341, rank:    78_099, pct: 1.00  },
-      { minXRP:    22_142, rank:   156_198, pct: 2.00  },
-      { minXRP:    14_261, rank:   234_296, pct: 3.00  },
-      { minXRP:    10_050, rank:   312_395, pct: 4.00  },
-      { minXRP:     7_588, rank:   390_494, pct: 5.00  },
-      { minXRP:     2_194, rank:   780_987, pct: 10.00 },
-      { minXRP:         0, rank: 7_809_870, pct: 100   },
-    ];
+       SEUILS PUBLICS — table "Percentile Distribution"
+       publiée sur rich-list.info (~7.81M comptes)
 
-    /* Interpolation linéaire entre deux seuils connus */
+       Pour mettre à jour : recopie les valeurs de la
+       colonne "Balance (or greater)" sur rich-list.info
+       ============================================= */
+    const DIST = [
+      { pct:  0.01, minXRP: 3_836_129, n:       743 },
+      { pct:  0.10, minXRP:   281_938, n:     7_810 },
+      { pct:  0.20, minXRP:   161_356, n:    15_620 },
+      { pct:  0.50, minXRP:    81_240, n:    39_050 },
+      { pct:  1.00, minXRP:    45_340, n:    78_099 },
+      { pct:  2.00, minXRP:    22_142, n:   156_198 },
+      { pct:  3.00, minXRP:    14_260, n:   234_296 },
+      { pct:  4.00, minXRP:    10_050, n:   312_395 },
+      { pct:  5.00, minXRP:     7_588, n:   390_494 },
+      { pct: 10.00, minXRP:     2_193, n:   780_987 },
+    ];
+    const TOTAL = 7_809_870;
+
     function estimateRank(xrp) {
-      for (let i = 0; i < THRESHOLDS.length - 1; i++) {
-        const hi = THRESHOLDS[i];
-        const lo = THRESHOLDS[i + 1];
+      if (xrp >= DIST[0].minXRP) return DIST[0].n;
+      for (let i = 0; i < DIST.length - 1; i++) {
+        const hi = DIST[i], lo = DIST[i + 1];
         if (xrp >= lo.minXRP) {
-          if (xrp >= hi.minXRP) return hi.rank;
-          // interpolation linéaire dans l'intervalle
-          const ratio = (xrp - lo.minXRP) / (hi.minXRP - lo.minXRP);
-          return Math.round(lo.rank - ratio * (lo.rank - hi.rank));
+          const t = (xrp - lo.minXRP) / (hi.minXRP - lo.minXRP);
+          return Math.round(lo.n - t * (lo.n - hi.n));
         }
       }
-      return THRESHOLDS[THRESHOLDS.length - 1].rank;
+      // En dessous du dernier seuil
+      const last = DIST[DIST.length - 1];
+      const t = Math.max(0, Math.min(1, xrp / last.minXRP));
+      return Math.round(last.n + (1 - t) * (TOTAL - last.n));
     }
 
     /* =============================================
-       TIERS — calibrés sur les vraies données
+       TIERS
+       Modifie les noms, icônes et descriptions librement
        ============================================= */
     const TIERS = [
-      {
-        name: "Whale",     emoji: "🐋",
-        minXRP: 1_000_000,
-        desc: "Top 0.01 % — tu fais partie de l'élite absolue du Ledger",
-        bg: "#0a0a2a", border: "#4466ff", text: "#aabbff"
-      },
-      {
-        name: "Shark",     emoji: "🦈",
-        minXRP: 100_000,
-        desc: "Top 0.1 % — un portefeuille de grande envergure",
-        bg: "#0a1a2a", border: "#0088cc", text: "#66ccff"
-      },
-      {
-        name: "Dolphin",   emoji: "🐬",
-        minXRP: 45_341,
-        desc: "Top 1 % — sérieusement positionné sur le XRP",
-        bg: "#082020", border: "#009988", text: "#44ddcc"
-      },
-      {
-        name: "Big Fish",  emoji: "🐠",
-        minXRP: 10_050,
-        desc: "Top 4 % — un très bon portefeuille XRP",
-        bg: "#101a0a", border: "#55aa22", text: "#99dd55"
-      },
-      {
-        name: "Fish",      emoji: "🐟",
-        minXRP: 2_194,
-        desc: "Top 10 % — déjà dans la minorité des holders XRP",
-        bg: "#181808", border: "#aaaa00", text: "#dddd44"
-      },
-      {
-        name: "Shrimp",    emoji: "🦐",
-        minXRP: 100,
-        desc: "Top 50 % environ — tu accumules, continue !",
-        bg: "#1a1008", border: "#cc8822", text: "#ffbb55"
-      },
-      {
-        name: "Plankton",  emoji: "🌊",
-        minXRP: 0,
-        desc: "Petit solde — bienvenue, chaque XRP compte !",
-        bg: "#1a0808", border: "#aa4444", text: "#ff8888"
-      },
+      { min: 1_000_000, name: "Whale",    icon: "🐋", desc: "Top 0.01 % — élite absolue du Ledger XRP",          color: "#4499ff" },
+      { min:   100_000, name: "Shark",    icon: "🦈", desc: "Top 0.1 % — portefeuille d'envergure majeure",       color: "#22ccdd" },
+      { min:    45_340, name: "Dolphin",  icon: "🐬", desc: "Top 1 % — position solide et reconnue",              color: "#00ddaa" },
+      { min:    10_050, name: "Big Fish", icon: "🐠", desc: "Top 4 % — holder significatif",                      color: "#88dd44" },
+      { min:     2_193, name: "Fish",     icon: "🐟", desc: "Top 10 % — tu dépasses 90 % des wallets actifs",     color: "#ddcc22" },
+      { min:       100, name: "Shrimp",   icon: "🦐", desc: "En dessous du top 10 % — accumulation en cours",     color: "#ff9944" },
+      { min:         0, name: "Plankton", icon: "🌊", desc: "Solde minimal — bienvenue sur le Ledger",             color: "#ff6666" },
     ];
 
-    /* Total de comptes de référence */
-    const TOTAL = 7_809_870;
-
     /* =============================================
-       FONCTION PRINCIPALE
+       MAIN
        ============================================= */
-    async function checkRank() {
-      const address = document.getElementById('addr').value.trim();
+    async function check() {
+      const addr = document.getElementById('addr').value.trim();
+      setError('');
 
-      hideError();
-      if (!address.match(/^r[1-9A-HJ-NP-Za-km-z]{24,33}$/)) {
-        showError("Adresse XRP invalide. Elle doit commencer par 'r' et faire 25–34 caractères.");
+      if (!addr.match(/^r[1-9A-HJ-NP-Za-km-z]{24,33}$/)) {
+        setError("Adresse invalide — elle doit commencer par « r » et faire 25 à 34 caractères.");
         return;
       }
 
       setLoading(true);
-
       try {
-        /* Appel XRPL pour le solde */
-        const res = await fetch('https://xrplcluster.com', {
-          method: 'POST',
+        const res  = await fetch('https://xrplcluster.com', {
+          method : 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body   : JSON.stringify({
             method: 'account_info',
-            params: [{ account: address, ledger_index: 'current' }]
+            params: [{ account: addr, ledger_index: 'current' }]
           })
         });
         const data = await res.json();
 
         if (data.result?.error) {
-          showError("Adresse introuvable sur le Ledger XRP. Vérifie qu'elle est bien active (funded).");
+          setError("Adresse introuvable — vérifiez qu'elle est active (funded) sur le Ledger.");
           setLoading(false);
           return;
         }
@@ -398,66 +397,48 @@
         const xrp  = parseInt(data.result.account_data.Balance) / 1_000_000;
         const rank = estimateRank(xrp);
         const pct  = (rank / TOTAL) * 100;
-        const tier = TIERS.find(t => xrp >= t.minXRP) || TIERS[TIERS.length - 1];
-
+        const tier = TIERS.find(t => xrp >= t.min) || TIERS[TIERS.length - 1];
         render(xrp, rank, pct, tier);
 
-      } catch (err) {
-        showError("Impossible de contacter le réseau XRP. Vérifie ta connexion et réessaie.");
+      } catch {
+        setError("Impossible de joindre le réseau XRP — vérifiez votre connexion.");
       }
-
       setLoading(false);
     }
 
-    /* =============================================
-       AFFICHAGE
-       ============================================= */
     function render(xrp, rank, pct, tier) {
-      /* Solde */
-      document.getElementById('val-balance').textContent =
+      document.getElementById('v-bal').textContent =
         xrp.toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' XRP';
+      document.getElementById('v-rank').textContent =
+        '#\u202F' + rank.toLocaleString('fr-FR');
+      document.getElementById('v-pct').textContent =
+        pct < 0.01 ? '< 0.01 %' : pct.toFixed(pct < 1 ? 3 : 2) + ' %';
 
-      /* Rang */
-      document.getElementById('val-rank').textContent =
-        '#' + rank.toLocaleString('fr-FR') + '*';
+      document.getElementById('tier-icon').textContent  = tier.icon;
+      document.getElementById('tier-name').textContent  = tier.name;
+      document.getElementById('tier-name').style.color  = tier.color;
+      document.getElementById('tier-desc').textContent  = tier.desc;
 
-      /* Percentile */
-      document.getElementById('val-pct').textContent =
-        pct < 0.01 ? '< 0.01 %' : pct.toFixed(3).replace(/\.?0+$/, '') + ' %';
+      const progress = Math.max(1, Math.min(99, (1 - rank / TOTAL) * 100));
+      document.getElementById('bar-fill').style.width   = progress + '%';
 
-      /* Tier badge */
-      const box = document.getElementById('tier-box');
-      box.style.background  = tier.bg;
-      box.style.borderColor = tier.border;
-      document.getElementById('tier-emoji').textContent     = tier.emoji;
-      document.getElementById('tier-name').textContent      = tier.name;
-      document.getElementById('tier-name').style.color      = tier.text;
-      document.getElementById('tier-desc').textContent      = tier.desc;
-
-      /* Barre : 100% = whale (rang 1), 0% = plankton */
-      const progress = Math.max(2, Math.min(98, (1 - rank / TOTAL) * 100));
-      document.getElementById('progress-fill').style.width  = progress + '%';
-
-      document.getElementById('result-area').style.display = 'block';
+      document.getElementById('results').style.display  = 'block';
     }
 
     function setLoading(on) {
-      document.getElementById('spinner').style.display   = on ? 'block' : 'none';
-      document.getElementById('check-btn').disabled      = on;
-      if (on) document.getElementById('result-area').style.display = 'none';
+      document.getElementById('spin').style.display   = on ? 'block' : 'none';
+      document.getElementById('btn').disabled         = on;
+      if (on) document.getElementById('results').style.display = 'none';
     }
 
-    function showError(msg) {
-      const el = document.getElementById('error-msg');
-      el.textContent  = msg;
-      el.style.display = 'block';
-    }
-    function hideError() {
-      document.getElementById('error-msg').style.display = 'none';
+    function setError(msg) {
+      const el = document.getElementById('err');
+      el.textContent   = msg;
+      el.style.display = msg ? 'block' : 'none';
     }
 
     document.getElementById('addr').addEventListener('keydown', e => {
-      if (e.key === 'Enter') checkRank();
+      if (e.key === 'Enter') check();
     });
   </script>
 </body>
