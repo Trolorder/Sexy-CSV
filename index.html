@@ -15,23 +15,20 @@
       overflow: hidden;
       font-family: Arial, sans-serif;
     }
-
     .container {
       position: relative;
-      max-width: 100%;        /* ← change ici si tu veux l'image plus grande ou plus petite */
+      max-width: 92%;
       width: 100%;
     }
-
     img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 12px;
     }
-
     h1 {
       position: absolute;
-      top: 22%;               /* ← ajuste ici pour monter/descendre le texte */
+      top: 22%;
       left: 50%;
       transform: translateX(-50%);
       color: #00bfff;
@@ -42,10 +39,9 @@
       z-index: 10;
       white-space: nowrap;
     }
-
     .btn {
       position: absolute;
-      top: 30%;              /* ← ajuste ici pour monter/descendre le bouton sur l'image */
+      top: 30%;
       left: 50%;
       transform: translateX(-50%);
       background: #00bfff;
@@ -60,10 +56,20 @@
       white-space: nowrap;
       z-index: 10;
     }
-
     .btn:hover {
       background: #00e0ff;
       transform: translateX(-50%) scale(1.05);
+    }
+
+    /* Compteur discret */
+    .visit-counter {
+      position: absolute;
+      bottom: 12px;
+      left: 15px;
+      color: #0a0a0a;        /* presque invisible sur fond noir */
+      font-size: 11px;
+      z-index: 5;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -71,13 +77,19 @@
 
   <div class="container">
     <img src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp" alt="XRP">
-
     <h1>1: Upload your .csv <br>2: Enjoy :)</h1>
-
     <a href="Git%20csv/Sexy_CSV.html">
       <button class="btn">Make your Kraken.csv file Sexy</button>
     </a>
+
+    <!-- Compteur discret (sera remplacé par Counter.dev) -->
+    <div class="visit-counter" id="counter">Visites : ...</div>
   </div>
+
+  <!-- Ici tu colleras le script de Counter.dev -->
+  <script>
+    // Ton script Counter.dev ira ici
+  </script>
 
 </body>
 </html>
