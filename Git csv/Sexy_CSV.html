@@ -58,15 +58,12 @@
             user-select: none;
         }
 
-        /* Card sans bordure basse quand repliée */
-        .card.collapsed-card {
-            border-bottom-color: transparent;
-        }
-
         .card-header h2 {
             margin: 0;
             font-size: 1.5rem;
         }
+
+        .toggle-icon {
             font-size: 1.4rem;
             transition: transform 0.3s ease;
             flex-shrink: 0;
@@ -105,7 +102,7 @@
             border: 1px solid var(--border);
         }
 
-        .controls { padding: 28px 24px; overflow: visible; }
+        .controls { padding: 28px 24px; }
         .filters-grid { display: grid; grid-template-columns: 2.2fr 1.1fr 1.1fr 1.2fr 1.2fr; gap: 20px; }
 
         .filter-group { display: flex; flex-direction: column; gap: 8px; }
@@ -413,6 +410,9 @@
                         <h2 style="margin:0; font-size:1.5rem;">✏️ Holdings manuels</h2>
                         <i class="fas fa-chevron-down toggle-icon" id="manualToggleIcon"></i>
                     </div>
+                    <div onclick="event.stopPropagation()">
+                        <button onclick="resetAllManualHoldings()" style="background:#f87171; color:white; padding:8px 18px; font-size:0.85rem; border-radius:12px; font-weight:600;">🗑 Tout supprimer</button>
+                    </div>
                 </div>
                 <div class="collapsible-content" id="manualCollapsible" style="display:flex; flex-direction:column; flex:1;">
                     <div class="manual-inner" style="display:flex; flex-direction:column; flex:1;">
@@ -453,8 +453,8 @@
         <div class="controls card" id="controls" style="display:none;">
             <div class="filters-grid">
                 <div class="filter-group"><label>Rechercher</label><input type="text" id="search" placeholder="Asset ou type..." onkeyup="applyFilters()"></div>
-                <div class="filter-group"><label>Date du</label><input type="date" id="dateFrom" onchange="applyFilters()" oninput="applyFilters()"></div>
-                <div class="filter-group"><label>Date au</label><input type="date" id="dateTo" onchange="applyFilters()" oninput="applyFilters()"></div>
+                <div class="filter-group"><label>Date du</label><input type="date" id="dateFrom" onchange="applyFilters()"></div>
+                <div class="filter-group"><label>Date au</label><input type="date" id="dateTo" onchange="applyFilters()"></div>
                 <div class="filter-group">
                     <label>Type</label>
                     <select id="typeFilter" onchange="addTypeFilter()">
@@ -480,10 +480,28 @@
                 <button onclick="exportFilteredCSV()">📥 Exporter CSV filtré</button>
                 <button onclick="resetAllFilters()">🔄 Réinitialiser tout</button>
             </div>
-            <div id="filterSummaryWrapper"></div>
+            <!-- Résumé de la période filtrée — visible uniquement si filtres actifs -->
+            <div id="filterSummary" style="display:none; margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;">
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Dépôts EUR (période)</div>
+                        <div id="filterSummaryDeposits" class="discreet-hide" style="font-size:1.4rem; font-weight:700; color:#4ade80;"></div>
+                    </div>
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Retraits EUR (période)</div>
+                        <div id="filterSummaryWithdrawals" class="discreet-hide" style="font-size:1.4rem; font-weight:700; color:#f87171;"></div>
+                    </div>
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Investi net (période)</div>
+                        <div id="filterSummaryNet" class="discreet-hide" style="font-size:1.4rem; font-weight:700;"></div>
+                    </div>
+                    <div style="background:rgba(30,42,71,0.5); padding:16px; border-radius:12px; text-align:center; border:1px solid var(--border);">
+                        <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:6px;">Transactions</div>
+                        <div id="filterSummaryCount" style="font-size:1.4rem; font-weight:700; color:#60a5fa;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
 
         <div class="card" id="chartContainer" style="display:none;">
             <div style="padding:16px 24px; background:#1a2338; display:flex; justify-content:flex-end; gap:8px; border-bottom:1px solid var(--border);">
@@ -706,14 +724,21 @@ if (CHART_BG_PATH) {
             'KSM':'kusama','KAVA':'kava','BAND':'band-protocol','REN':'republic-protocol'
         };
 
+        function resetAllManualHoldings() {
+            if (Object.keys(manualHoldings).length === 0) return;
+            if (!confirm('Supprimer tous les holdings manuels ?')) return;
+            manualHoldings = {};
+            saveManualHoldings();
+            renderManualTable();
+            refreshPortfolio();
+        }
+
         function toggleManualSection() {
             manualCollapsed = !manualCollapsed;
             const content = document.getElementById('manualCollapsible');
             const icon = document.getElementById('manualToggleIcon');
-            const card = document.getElementById('manualCard');
             content.classList.toggle('collapsed', manualCollapsed);
             icon.style.transform = manualCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
-            card.style.borderBottomColor = manualCollapsed ? 'transparent' : '';
         }
 
         function togglePortfolioSection() {
@@ -1324,13 +1349,16 @@ if (CHART_BG_PATH) {
         }
 
         function updateFilterSummary() {
-            const dateFrom = document.getElementById('dateFrom').value;
-            const dateTo = document.getElementById('dateTo').value;
-            const hasDateFilter = dateFrom !== '' || dateTo !== '';
+            const hasFilters = document.getElementById('search').value.trim() !== ''
+                || document.getElementById('dateFrom').value !== ''
+                || document.getElementById('dateTo').value !== ''
+                || selectedTypeFilters.length > 0
+                || selectedAssetFilters.length > 0;
 
-            const wrapper = document.getElementById('filterSummaryWrapper');
-            if (!hasDateFilter) { wrapper.innerHTML = ''; return; }
+            const summary = document.getElementById('filterSummary');
+            if (!hasFilters) { summary.style.display = 'none'; return; }
 
+            // Calculer sur filteredTransactions (sans le filtre de quantité)
             const deposits = filteredTransactions
                 .filter(t => t.type === 'deposit' && t.asset.includes('EUR') && t.amount > 0)
                 .reduce((s, t) => s + t.amount, 0);
@@ -1339,19 +1367,15 @@ if (CHART_BG_PATH) {
                 .reduce((s, t) => s + Math.abs(t.amount), 0);
             const net = deposits - withdrawals;
 
-            const fmt = d => d ? d.split('-').reverse().join('/') : '…';
-            const label = `Investi net du ${fmt(dateFrom)} au ${fmt(dateTo)}`;
+            document.getElementById('filterSummaryDeposits').textContent = `+${deposits.toFixed(2)} €`;
+            document.getElementById('filterSummaryWithdrawals').textContent = `-${withdrawals.toFixed(2)} €`;
+            const netEl = document.getElementById('filterSummaryNet');
+            netEl.textContent = `${net >= 0 ? '+' : ''}${net.toFixed(2)} €`;
+            netEl.style.color = net >= 0 ? '#4ade80' : '#f87171';
+            document.getElementById('filterSummaryCount').textContent = filteredTransactions.length;
 
-            wrapper.innerHTML = `
-                <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
-                    <span style="color:#94a3b8; font-size:0.95rem;">📅 ${label}</span>
-                    <span class="discreet-hide" style="font-size:1.6rem; font-weight:700; color:${net >= 0 ? '#4ade80' : '#f87171'};">
-                        ${net >= 0 ? '+' : ''}${net.toFixed(2)} €
-                    </span>
-                </div>`;
+            summary.style.display = 'block';
         }
-
-        function applyFilters() {
             const search = document.getElementById('search').value.toLowerCase().trim();
             const from = document.getElementById('dateFrom').value;
             const to = document.getElementById('dateTo').value;
