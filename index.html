@@ -13,153 +13,175 @@
     }
 
     body {
-      background-color: #000; /* ← couleur de fond de toute la page */
+      background-color: #000;        /* ← couleur de fond */
       font-family: Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      gap: 0;
     }
 
     /* =============================================
-       TITRE PRINCIPAL ("1: Upload your .csv ...")
+       TITRE PRINCIPAL
+       margin-bottom : espace entre le titre et le bouton CSV
        ============================================= */
     h1 {
       color: #00bfff;                          /* ← couleur du texte */
-      font-size: clamp(1.4rem, 4vw, 2.4rem);  /* ← taille du texte (min, fluide, max) */
-      text-shadow: 0 0 15px #00bfff;          /* ← intensité du halo bleu */
+      font-size: clamp(1.4rem, 4vw, 2.4rem);  /* ← taille (min, fluide, max) */
+      text-shadow: 0 0 15px #00bfff;          /* ← halo bleu */
       text-align: center;
       line-height: 1.4;
-      margin-bottom: 30px;                    /* ← espace SOUS le titre */
+      margin-bottom: 28px;                    /* ← espace sous le titre */
+      padding: 0 20px;
     }
 
     /* =============================================
-       STYLE COMMUN DES BOUTONS
-       (s'applique aux 2 boutons)
+       STYLE COMMUN DES DEUX BOUTONS
        ============================================= */
     .btn {
-      background: #00bfff;           /* ← couleur de fond du bouton */
-      color: #000;                   /* ← couleur du texte du bouton */
+      background: #00bfff;           /* ← couleur de fond */
+      color: #000;                   /* ← couleur du texte */
       border: none;
-      padding: 16px 45px;            /* ← taille interne : haut/bas gauche/droite */
-      font-size: clamp(1.1rem, 3vw, 1.55rem); /* ← taille du texte */
+      padding: 16px 45px;            /* ← taille interne haut/bas gauche/droite */
+      font-size: clamp(1.1rem, 3vw, 1.55rem);
       font-weight: bold;
-      border-radius: 50px;           /* ← arrondi des coins (50px = pilule) */
+      border-radius: 50px;           /* ← arrondi (50px = pilule) */
       cursor: pointer;
-      box-shadow: 0 0 30px #00bfff; /* ← intensité du halo lumineux */
+      box-shadow: 0 0 30px #00bfff; /* ← halo lumineux */
       transition: all 0.3s ease;
       text-decoration: none;
       display: inline-block;
     }
     .btn:hover {
-      background: #00e0ff;           /* ← couleur au survol */
-      transform: scale(1.07);        /* ← grossissement au survol (1.07 = +7%) */
+      background: #00e0ff;
+      transform: scale(1.07);
     }
 
     /* =============================================
-       IMAGE XRP (le grand logo au centre)
+       BOUTON CSV (au-dessus de l'image)
+       margin-bottom : espace entre le bouton et l'image
        ============================================= */
-    .xrp-wrapper {
-      width: 100%;
-      max-width: 5000px;
-      margin-top: -10px;   /* ← rapproche l'image du bouton du dessus (valeur négative = monte) */
+    .btn-csv {
+      margin-bottom: 28px;           /* ← espace entre le bouton CSV et l'image */
     }
-    .xrp-wrapper img {
+
+    /* =============================================
+       BLOC IMAGE + BOUTON RICHLIST
+       C'est un seul bloc : position:relative permet
+       de coller le bouton exactement sur l'image
+       ============================================= */
+    .xrp-block {
+      position: relative;            /* ← conteneur de référence pour le bouton */
+      width: 100%;
+      max-width: 700px;              /* ← largeur max du bloc image */
+    }
+
+    /* =============================================
+       IMAGE XRP
+       max-height : hauteur de l'image (en vh = % de l'écran)
+       object-position : cadrage vertical (60% = centre-bas)
+       ============================================= */
+    .xrp-block img {
       width: 100%;
       height: auto;
       display: block;
       object-fit: cover;
-      object-position: center 60%;  /* ← cadrage de l'image (haut/bas en %) */
-      max-height: 55vh;             /* ← hauteur max de l'image (% de l'écran) */
-      border-radius: 0 0 16px 16px;
-      mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
+      object-position: center 60%;   /* ← cadrage de l'image */
+      max-height: 60vh;              /* ← hauteur max (% de l'écran) */
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 15%,
+        black 72%,                   /* ← jusqu'où l'image est pleinement visible */
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 15%,
+        black 72%,
+        transparent 100%
+      );
     }
 
     /* =============================================
-       SECTION DU BAS (sous l'image XRP)
+       BOUTON RICHLIST
+       Positionné dans le bas de l'image.
+       bottom : distance depuis le bas de l'image
+       Augmente pour monter, diminue pour descendre.
        ============================================= */
-    .bottom-section {
+    .btn-richlist-wrap {
+      position: absolute;
+      bottom: 14%;                   /* ← position verticale dans l'image (% depuis le bas) */
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-top: -170px;
-      position: relative;  /* ← AJOUTE */
-      z-index: 10;         /* ← AJOUTE */
+      gap: 10px;                     /* ← espace entre le sous-titre et le bouton */
+      width: 100%;
+      padding: 0 20px;
+      z-index: 2;
     }
 
-    /* Sous-titre de la section richlist */
-    .bottom-section h2 {
-      color: #00bfff;                         /* ← couleur du texte */
-      font-size: clamp(1rem, 3vw, 1.4rem);    /* ← taille du texte */
-      text-shadow: 0 0 10px #00bfff;          /* ← halo bleu */
+    /* Sous-titre au-dessus du bouton richlist */
+    .btn-richlist-wrap p {
+      color: #00bfff;
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);  /* ← taille du texte */
+      text-shadow: 0 0 10px #00bfff;
       text-align: center;
+      font-weight: bold;
     }
 
     /* =============================================
        RESPONSIVE MOBILE
        ============================================= */
     @media (max-width: 480px) {
-      .xrp-wrapper {
-        max-width: 100%;
-        margin-top: -5px;
-      }
-      .xrp-wrapper img {
-        max-height: 45vh;
+      .xrp-block img {
+        max-height: 55vh;            /* ← hauteur image sur mobile */
         object-position: center 55%;
+      }
+      .btn-richlist-wrap {
+        bottom: 12%;                 /* ← position bouton sur mobile */
+      }
+      .btn {
+        padding: 14px 32px;          /* ← taille bouton sur mobile */
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- =============================================
-       TITRE EN HAUT DE PAGE
-       Pour changer le texte : modifie ce qui est entre <h1> et </h1>
-       ============================================= -->
+  <!-- TITRE — modifie le texte librement -->
   <h1>1: Upload your .csv<br>2: Enjoy :)</h1>
 
-
-  <!-- =============================================
-       BOUTON 1 — CSV TOOL
-       href="..." → chemin vers ta page CSV
-       ============================================= -->
+  <!-- BOUTON CSV -->
   <a href="Git%20csv/Sexy_CSV.html">
-    <button class="btn">Make MyFile.csv Sexy</button>
+    <button class="btn btn-csv">Make MyFile.csv Sexy</button>
   </a>
 
+  <!-- BLOC IMAGE + BOUTON RICHLIST
+       Les deux sont liés : le bouton est toujours
+       positionné par rapport à l'image, peu importe
+       la taille de l'écran -->
+  <div class="xrp-block">
 
-  <!-- =============================================
-       IMAGE XRP (logo central)
-       src="..." → remplace l'URL pour changer l'image
-       ============================================= -->
-  <div class="xrp-wrapper">
+    <!-- IMAGE XRP — remplace src pour changer l'image -->
     <img
       src="https://coinacademy.fr/wp-content/uploads/2022/04/xrp-1600x1000.jpg.webp"
       alt="XRP logo"
     >
-  </div>
 
-
-  <!-- =============================================
-       SECTION DU BAS — RICHLIST
-       Pour repositionner vers le HAUT : réduis margin-top dans .bottom-section
-       Pour repositionner vers le BAS : augmente margin-top dans .bottom-section
-       ============================================= -->
-  <div class="bottom-section">
-
-    <!-- Texte au-dessus du bouton richlist — modifie librement -->
-    <h2>Where do you stand on the XRP Richlist?</h2>
-
-    <!-- BOUTON 2 — RICHLIST
-         href="..." → chemin vers ta page richlist -->
-    <a href="https://rich-list.info" target="_blank" rel="noopener">
-    <button class="btn">🏆 Check My Ranking</button>
-    </a>
+    <!-- BOUTON RICHLIST
+         Pour monter : augmente "bottom" dans .btn-richlist-wrap
+         Pour descendre : diminue "bottom" -->
+    <div class="btn-richlist-wrap">
+      <p>Where do you stand on the XRP Richlist?</p>
+      <a href="https://rich-list.info" target="_blank" rel="noopener">
+        <button class="btn">🏆 Check My Ranking</button>
+      </a>
+    </div>
 
   </div>
 
