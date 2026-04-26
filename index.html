@@ -8,24 +8,21 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ─────────────────────────────────────────────
-       CORPS : exactement la hauteur de l'écran.
-       Tout s'organise dedans, rien ne déborde.
-    ───────────────────────────────────────────── */
     body {
       background: #000;
       font-family: Arial, sans-serif;
-      height: 100dvh;          /* 100% écran, barre mobile incluse */
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow: hidden;        /* pas de scroll */
+      overflow: hidden;
     }
 
-    /* ─────────────────────────────────────────────
+    /* =============================================
        TITRE
-       padding-top : espace entre le haut de l'écran et le titre
-    ───────────────────────────────────────────── */
+       padding-top  : espace haut de page → titre
+       margin-bottom: espace titre → bouton CSV
+       ============================================= */
     h1 {
       color: #00bfff;
       font-size: clamp(1.3rem, 4vw, 2.2rem);
@@ -33,14 +30,13 @@
       text-align: center;
       line-height: 1.4;
       padding: 0 20px;
-
-      padding-top: 5vh;        /* ← espace AU-DESSUS du titre (% écran) */
-      margin-bottom: 3vh;      /* ← espace SOUS le titre (% écran)      */
+      padding-top:    5vh;   /* ← PC : espace au-dessus du titre */
+      margin-bottom:  3vh;   /* ← PC : espace sous le titre      */
     }
 
-    /* ─────────────────────────────────────────────
+    /* =============================================
        STYLE COMMUN BOUTONS
-    ───────────────────────────────────────────── */
+       ============================================= */
     .btn {
       background: #00bfff;
       color: #000;
@@ -58,41 +54,47 @@
     }
     .btn:hover { background: #00e0ff; transform: scale(1.07); }
 
-    /* ─────────────────────────────────────────────
+    /* =============================================
        BOUTON CSV
-       margin-bottom : espace entre lui et l'image
-    ───────────────────────────────────────────── */
+       margin-bottom: espace bouton CSV → image
+       ============================================= */
     .btn-csv-wrap {
-      margin-bottom: 1vh;      /* ← espace entre bouton CSV et image (% écran) */
       flex-shrink: 0;
+      margin-bottom: 1vh;    /* ← PC : espace entre bouton CSV et image */
     }
 
-    /* ─────────────────────────────────────────────
-       BLOC IMAGE — remplit TOUT l'espace restant.
-       C'est la clé : plus besoin de calculer quoi
-       que ce soit, l'image s'adapte toute seule.
-    ───────────────────────────────────────────── */
+    /* =============================================
+       BLOC IMAGE
+       Le bloc prend tout l'espace restant (flex:1).
+       max-height : taille max du logo
+         → diminue pour un logo plus petit
+         → augmente pour un logo plus grand
+       ============================================= */
     .xrp-block {
       position: relative;
       width: 100%;
-      max-width: 700px;        /* ← largeur max (surtout utile sur PC) */
-      flex: 1;                 /* ← prend tout l'espace restant */
-      min-height: 0;           /* ← nécessaire pour que flex:1 fonctionne */
-
+      max-width: 700px;
+      flex: 1;
+      min-height: 0;
+      max-height: 62vh;      /* ← PC : taille max du logo */
     }
 
+    /* =============================================
+       IMAGE XRP
+       object-position : cadrage vertical
+       Les valeurs du mask contrôlent le fondu
+       ============================================= */
     .xrp-block img {
       width: 100%;
-      height: 100%;            /* ← remplit exactement le bloc */
-      max-height: 62vh;        /* ← taille max du logo (diminue = plus petit) */
+      height: 100%;
       display: block;
       object-fit: cover;
-      object-position: center 58%;  /* ← cadrage vertical de l'image */
+      object-position: center 58%;   /* ← PC : cadrage vertical */
       mask-image: linear-gradient(
         to bottom,
         transparent 0%,
         black 12%,
-        black 68%,             /* ← jusqu'où l'image est pleinement visible */
+        black 68%,
         transparent 100%
       );
       -webkit-mask-image: linear-gradient(
@@ -104,16 +106,15 @@
       );
     }
 
-    /* ─────────────────────────────────────────────
-       BOUTON RICHLIST
-       Ancré dans l'image via position:absolute.
-       bottom : % depuis le bas de l'image.
-       Comme l'image remplit toujours exactement
-       le bloc, ce % est fiable sur tous les écrans.
-    ───────────────────────────────────────────── */
+    /* =============================================
+       BOUTON RICHLIST (ancré dans l'image)
+       bottom : % depuis le bas du bloc image
+         → augmente pour monter
+         → diminue pour descendre
+       ============================================= */
     .btn-richlist-wrap {
       position: absolute;
-      bottom: 18%;             /* ← position dans l'image (augmente = monte) */
+      bottom: 18%;           /* ← PC : position du bouton dans l'image */
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -133,58 +134,57 @@
       font-weight: bold;
     }
 
-    /* ─────────────────────────────────────────────
-       MOBILE  ≤ 520px
-       Seulement les petits ajustements fins,
-       la structure de base reste la même.
-    ───────────────────────────────────────────── */
+    /* =============================================
+       MOBILE ≤ 520px
+       ============================================= */
     @media (max-width: 520px) {
 
       h1 {
-        padding-top: 4vh;      /* ← MOBILE : espace au-dessus du titre  */
-        margin-bottom: 2.5vh;  /* ← MOBILE : espace sous le titre       */
+        padding-top:   2vh;   /* ← MOBILE : espace au-dessus du titre */
+        margin-bottom: 2vh;   /* ← MOBILE : espace sous le titre      */
       }
 
       .btn-csv-wrap {
-        margin-bottom: 2vh;    /* ← MOBILE : espace entre bouton et image */
+        margin-bottom: 1vh;   /* ← MOBILE : espace entre bouton CSV et image */
       }
 
       .btn {
-        padding: 13px 32px;    /* ← MOBILE : taille des boutons          */
+        padding: 13px 32px;   /* ← MOBILE : taille des boutons */
+      }
+
+      .xrp-block {
+        max-height: 70vh;     /* ← MOBILE : taille max du logo */
       }
 
       .xrp-block img {
-        object-position: center 52%;  /* ← MOBILE : cadrage vertical      */
+        object-position: center 52%;  /* ← MOBILE : cadrage vertical */
       }
 
       .btn-richlist-wrap {
-        bottom: 20%;           /* ← MOBILE : position bouton dans l'image */
+        bottom: 20%;          /* ← MOBILE : position du bouton dans l'image */
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- TITRE -->
   <h1>1: Upload your .csv<br>2: Enjoy :)</h1>
 
-  <!-- BOUTON CSV -->
   <div class="btn-csv-wrap">
     <a href="Git%20csv/Sexy_CSV.html">
       <button class="btn">Make MyFile.csv Sexy</button>
     </a>
   </div>
 
-  <!-- IMAGE + BOUTON RICHLIST -->
   <div class="xrp-block">
     <img
-      src="https://raw.githubusercontent.com/Trolorder/Sexy-CSV/refs/heads/main/68260caacb45056c0e10972fba9445f6B.png"
+      src="https://raw.githubusercontent.com/Trolorder/Sexy-CSV/refs/heads/main/68260caacb45056c0e10972fba9445f6M.png"
       alt="XRP logo"
     >
     <div class="btn-richlist-wrap">
-      <p>Where do you stand on the XRP Richlist?</p>
+      <p>what's my rank ?</p>
       <a href="https://rich-list.info" target="_blank" rel="noopener">
-        <button class="btn">🏆 Check My Ranking</button>
+        <button class="btn">Check My Ranking</button>
       </a>
     </div>
   </div>
