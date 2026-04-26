@@ -63,7 +63,7 @@
        margin-bottom : espace entre lui et l'image
     ───────────────────────────────────────────── */
     .btn-csv-wrap {
-      margin-bottom: 3vh;      /* ← espace entre bouton CSV et image (% écran) */
+      margin-bottom: 1vh;      /* ← espace entre bouton CSV et image (% écran) */
       flex-shrink: 0;
     }
 
@@ -78,6 +78,7 @@
       max-width: 700px;        /* ← largeur max (surtout utile sur PC) */
       flex: 1;                 /* ← prend tout l'espace restant */
       min-height: 0;           /* ← nécessaire pour que flex:1 fonctionne */
+      max-height: 65vh;        /* ← taille max du logo (diminue = plus petit) */
     }
 
     .xrp-block img {
@@ -139,12 +140,12 @@
     @media (max-width: 520px) {
 
       h1 {
-        padding-top: 2vh;      /* ← MOBILE : espace au-dessus du titre  */
-        margin-bottom: 0vh;  /* ← MOBILE : espace sous le titre       */
+        padding-top: 4vh;      /* ← MOBILE : espace au-dessus du titre  */
+        margin-bottom: 2.5vh;  /* ← MOBILE : espace sous le titre       */
       }
 
       .btn-csv-wrap {
-        margin-bottom: 0vh;    /* ← MOBILE : espace entre bouton et image */
+        margin-bottom: 2vh;    /* ← MOBILE : espace entre bouton et image */
       }
 
       .btn {
@@ -152,7 +153,7 @@
       }
 
       .xrp-block img {
-        object-position: center 30%;  /* ← MOBILE : cadrage vertical      */
+        object-position: center 52%;  /* ← MOBILE : cadrage vertical      */
       }
 
       .btn-richlist-wrap {
@@ -176,13 +177,13 @@
   <!-- IMAGE + BOUTON RICHLIST -->
   <div class="xrp-block">
     <img
-      src="https://raw.githubusercontent.com/Trolorder/Sexy-CSV/refs/heads/main/68260caacb45056c0e10972fba9445f6M.png"
+      src="https://raw.githubusercontent.com/Trolorder/Sexy-CSV/refs/heads/main/68260caacb45056c0e10972fba9445f6B.png"
       alt="XRP logo"
     >
     <div class="btn-richlist-wrap">
-      <p>what's my rank ?</p>
+      <p>Where do you stand on the XRP Richlist?</p>
       <a href="https://rich-list.info" target="_blank" rel="noopener">
-        <button class="btn">Check My Ranking</button>
+        <button class="btn">🏆 Check My Ranking</button>
       </a>
     </div>
   </div>
