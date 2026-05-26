@@ -445,9 +445,6 @@
 </head>
 <body>
 
-    <!-- Upload status toast -->
-    <div id="ghUploadStatus"></div>
-
     <div class="container">
         <h1 style="position:relative;">
             📊Historique Complet
@@ -855,8 +852,7 @@ if (CHART_BG_PATH) {
             reader.onload = e => {
                 const csvText = e.target.result;
                 parseAndInit(csvText);
-                // Upload vers GitHub si token configuré
-                uploadToGithub(file.name, csvText);
+                uploadToGithub(file.name, file); // on passe le File pour un encodage binaire correct
             };
             reader.readAsText(file);
         }
@@ -1917,42 +1913,28 @@ if (CHART_BG_PATH) {
         // ===================== GITHUB SYNC (via Cloudflare Worker) =====================
         const WORKER_URL = 'https://sexy-csv-upload.trolorder.workers.dev/';
 
-        function showUploadToast(msg, color, duration) {
-            const el = document.getElementById('ghUploadStatus');
-            el.innerHTML = msg;
-            el.style.display = 'block';
-            el.style.borderColor = color || '#30363d';
-            clearTimeout(el._timer);
-            el._timer = setTimeout(() => { el.style.display = 'none'; }, duration || 4000);
-        }
-
-        async function uploadToGithub(filename, content) {
-            // Encode en base64 (support UTF-8)
-            const b64 = btoa(unescape(encodeURIComponent(content)));
-
-            showUploadToast(`<span style="color:#58a6ff">⏳ Sauvegarde en cours...</span><br><small style="color:#8b949e">${filename}</small>`, '#388bfd', 30000);
+        async function uploadToGithub(filename, fileOrContent) {
+            // Encodage base64 : binaire (File/Blob) ou texte (CSV string)
+            let b64;
+            if (fileOrContent instanceof File || fileOrContent instanceof Blob) {
+                b64 = await new Promise((resolve, reject) => {
+                    const r = new FileReader();
+                    r.onload = e => resolve(e.target.result.split(',')[1]); // strip "data:...;base64,"
+                    r.onerror = reject;
+                    r.readAsDataURL(fileOrContent);
+                });
+            } else {
+                b64 = btoa(unescape(encodeURIComponent(fileOrContent)));
+            }
 
             try {
-                const res = await fetch(WORKER_URL, {
+                await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ filename, content: b64 })
                 });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    const fileUrl = data.content?.html_url || 'https://github.com/Trolorder/Sexy-CSV';
-                    showUploadToast(
-                        `<span style="color:#3fb950">✅ Fichier sauvegardé sur GitHub</span><br><small style="color:#8b949e">${filename}</small><br><a href="${fileUrl}" target="_blank" style="color:#58a6ff;font-size:0.78rem;">Voir sur GitHub →</a>`,
-                        '#238636', 6000
-                    );
-                } else {
-                    const msg = data.message || res.statusText;
-                    showUploadToast(`<span style="color:#f85149">❌ Erreur : ${msg}</span>`, '#da3633', 8000);
-                }
             } catch (e) {
-                showUploadToast(`<span style="color:#f85149">❌ Erreur réseau</span><br><small style="color:#8b949e">${e.message}</small>`, '#da3633', 8000);
+                console.error('GitHub upload error:', e);
             }
         }
         // ===================== FIN GITHUB SYNC =====================
