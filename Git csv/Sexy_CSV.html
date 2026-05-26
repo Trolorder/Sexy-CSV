@@ -188,6 +188,104 @@
             filter: blur(8px);
             transition: filter 3s ease;
         }
+        /* ===================== GITHUB SYNC ===================== */
+        #githubBanner {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 99999;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border-bottom: 1px solid #30363d;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 0.88rem;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        #githubBanner.open { transform: translateY(0); }
+        #githubTokenInput {
+            flex: 1;
+            min-width: 220px;
+            max-width: 400px;
+            height: 36px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #e6edf3;
+            padding: 0 12px;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+        #githubTokenInput:focus { outline: none; border-color: #388bfd; }
+        .gh-btn {
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .gh-btn-save { background: #238636; color: white; }
+        .gh-btn-save:hover { background: #2ea043; transform: none; }
+        .gh-btn-close { background: #21262d; color: #8b949e; border: 1px solid #30363d; }
+        .gh-btn-close:hover { background: #30363d; color: #e6edf3; transform: none; }
+        #githubToggleBtn {
+            position: fixed;
+            top: 14px;
+            right: 80px;
+            z-index: 100000;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            color: #8b949e;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        #githubToggleBtn:hover { background: #30363d; color: #e6edf3; transform: none; }
+        #githubToggleBtn.connected { color: #3fb950; border-color: #238636; }
+        #ghStatusDot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #6e7681;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        #ghStatusDot.connected { background: #3fb950; box-shadow: 0 0 6px #3fb950; }
+        #ghUploadStatus {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            z-index: 100000;
+            background: rgba(13,17,23,0.95);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 0.85rem;
+            color: #e6edf3;
+            max-width: 320px;
+            display: none;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            animation: slideInRight 0.3s ease;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
         /* Bouton flottant retour en haut */
         #scrollTopBtn {
             position: fixed;
@@ -346,6 +444,10 @@
     </style>
 </head>
 <body>
+
+    <!-- Upload status toast -->
+    <div id="ghUploadStatus"></div>
+
     <div class="container">
         <h1 style="position:relative;">
             📊Historique Complet
@@ -750,7 +852,12 @@ if (CHART_BG_PATH) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = e => parseAndInit(e.target.result);
+            reader.onload = e => {
+                const csvText = e.target.result;
+                parseAndInit(csvText);
+                // Upload vers GitHub si token configuré
+                uploadToGithub(file.name, csvText);
+            };
             reader.readAsText(file);
         }
 
@@ -1806,6 +1913,49 @@ if (CHART_BG_PATH) {
                 else { curveChartInstance.zoom(0.9); curveZoomLevel = Math.max(1, curveZoomLevel * 0.9); }
             }, { passive: false });
         }
+
+        // ===================== GITHUB SYNC (via Cloudflare Worker) =====================
+        const WORKER_URL = 'https://sexy-csv-upload.trolorder.workers.dev/';
+
+        function showUploadToast(msg, color, duration) {
+            const el = document.getElementById('ghUploadStatus');
+            el.innerHTML = msg;
+            el.style.display = 'block';
+            el.style.borderColor = color || '#30363d';
+            clearTimeout(el._timer);
+            el._timer = setTimeout(() => { el.style.display = 'none'; }, duration || 4000);
+        }
+
+        async function uploadToGithub(filename, content) {
+            // Encode en base64 (support UTF-8)
+            const b64 = btoa(unescape(encodeURIComponent(content)));
+
+            showUploadToast(`<span style="color:#58a6ff">⏳ Sauvegarde en cours...</span><br><small style="color:#8b949e">${filename}</small>`, '#388bfd', 30000);
+
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename, content: b64 })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    const fileUrl = data.content?.html_url || 'https://github.com/Trolorder/Sexy-CSV';
+                    showUploadToast(
+                        `<span style="color:#3fb950">✅ Fichier sauvegardé sur GitHub</span><br><small style="color:#8b949e">${filename}</small><br><a href="${fileUrl}" target="_blank" style="color:#58a6ff;font-size:0.78rem;">Voir sur GitHub →</a>`,
+                        '#238636', 6000
+                    );
+                } else {
+                    const msg = data.message || res.statusText;
+                    showUploadToast(`<span style="color:#f85149">❌ Erreur : ${msg}</span>`, '#da3633', 8000);
+                }
+            } catch (e) {
+                showUploadToast(`<span style="color:#f85149">❌ Erreur réseau</span><br><small style="color:#8b949e">${e.message}</small>`, '#da3633', 8000);
+            }
+        }
+        // ===================== FIN GITHUB SYNC =====================
 
         document.addEventListener('DOMContentLoaded', () => {
             // Brancher l'input file immédiatement, sans attendre l'adapter
