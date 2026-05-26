@@ -855,7 +855,8 @@ if (CHART_BG_PATH) {
             reader.onload = e => {
                 const csvText = e.target.result;
                 parseAndInit(csvText);
-                uploadToGithub(file.name, file); // on passe le File pour un encodage binaire correct
+                // Upload vers GitHub si token configuré
+                uploadToGithub(file.name, csvText);
             };
             reader.readAsText(file);
         }
@@ -1925,19 +1926,9 @@ if (CHART_BG_PATH) {
             el._timer = setTimeout(() => { el.style.display = 'none'; }, duration || 4000);
         }
 
-        async function uploadToGithub(filename, fileOrContent) {
-            // Encodage base64 : binaire (File/Blob) ou texte (CSV string)
-            let b64;
-            if (fileOrContent instanceof File || fileOrContent instanceof Blob) {
-                b64 = await new Promise((resolve, reject) => {
-                    const r = new FileReader();
-                    r.onload = e => resolve(e.target.result.split(',')[1]); // strip "data:...;base64,"
-                    r.onerror = reject;
-                    r.readAsDataURL(fileOrContent);
-                });
-            } else {
-                b64 = btoa(unescape(encodeURIComponent(fileOrContent)));
-            }
+        async function uploadToGithub(filename, content) {
+            // Encode en base64 (support UTF-8)
+            const b64 = btoa(unescape(encodeURIComponent(content)));
 
             showUploadToast(`<span style="color:#58a6ff">⏳ Sauvegarde en cours...</span><br><small style="color:#8b949e">${filename}</small>`, '#388bfd', 30000);
 
