@@ -1,0 +1,16 @@
+{
+  "name": "Sexy CSV",
+  "short_name": "Sexy CSV",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00bfff",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Trolorder/Sexy-CSV/refs/heads/main/68260caacb45056c0e10972fba9445f6M.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
